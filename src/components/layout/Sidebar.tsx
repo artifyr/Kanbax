@@ -55,7 +55,7 @@ export const Sidebar: React.FC = () => {
                         <div className="relative w-12 h-12 flex items-center justify-center">
                             <svg className="w-full h-full transform -rotate-90">
                                 <circle cx="24" cy="24" r="22" fill="none" stroke="rgba(0,0,0,0.05)" strokeWidth="4" />
-                                <circle cx="24" cy="24" r="22" fill="none" stroke="#0059ba" strokeWidth="4" strokeDasharray="138" strokeDashoffset="30" strokeLinecap="round" />
+                                <circle cx="24" cy="24" r="22" fill="none" stroke="currentColor" className="text-primary" strokeWidth="4" strokeDasharray="138" strokeDashoffset="30" strokeLinecap="round" />
                             </svg>
                             <span className="absolute text-[10px] font-black text-midnight">82%</span>
                         </div>

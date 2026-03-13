@@ -60,9 +60,9 @@ export const ActiveSprints: React.FC = () => {
                         <div key={column.id} className="flex flex-col h-full min-h-[500px]">
                             <div className="flex items-center justify-between mb-8 px-2">
                                 <div className="flex items-center gap-3">
-                                    <div className={`w-3.5 h-3.5 rounded-lg ${column.color} shadow-lg shadow-midnight/5 ring-4 ring-white transition-all`} />
+                                    <div className={`w-3.5 h-3.5 rounded-lg ${column.color} shadow-lg shadow-midnight/5 ring-4 ring-paper-white transition-all`} />
                                     <h3 className="text-xs font-black text-midnight uppercase tracking-[0.2em]">{column.label}</h3>
-                                    <span className="text-[10px] font-black tabular-nums bg-white border border-midnight/[0.03] px-2.5 py-0.5 rounded-lg text-slate-400 shadow-sm">
+                                    <span className="text-[10px] font-black tabular-nums bg-paper-white border border-midnight/[0.03] px-2.5 py-0.5 rounded-lg text-slate-400 shadow-sm">
                                         {filteredTasks.filter(t => t.status === column.id).length}
                                     </span>
                                 </div>
@@ -87,7 +87,7 @@ export const ActiveSprints: React.FC = () => {
                                                                 ref={provided.innerRef}
                                                                 {...provided.draggableProps}
                                                                 {...provided.dragHandleProps}
-                                                                className={`bg-white p-7 rounded-[2rem] shadow-soft border border-midnight/5 group hover:border-primary/20 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden active:scale-95 active:rotate-2 ${snapshot.isDragging ? 'rotate-3 scale-105 shadow-2xl z-50 ring-2 ring-primary/20' : ''}`}
+                                                                className={`bg-paper-white p-7 rounded-[2rem] shadow-soft border border-midnight/5 group hover:border-primary/20 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden active:scale-95 active:rotate-2 ${snapshot.isDragging ? 'rotate-3 scale-105 shadow-2xl z-50 ring-2 ring-primary/20' : ''}`}
                                                             >
                                                                 <div className="flex justify-between items-start mb-5">
                                                                     <span className="text-[9px] font-black text-slate-300 uppercase tracking-widest tabular-nums">{task.id}</span>
@@ -124,7 +124,7 @@ export const ActiveSprints: React.FC = () => {
 
                                                                 <div className="flex items-center justify-between pt-5 border-t border-midnight/5">
                                                                     <div className="flex items-center gap-2 group/user cursor-pointer">
-                                                                        <img className="w-8 h-8 rounded-xl object-cover ring-4 ring-white shadow-xl group-hover/user:scale-110 transition-transform" src={assignee?.avatar} alt="assignee" />
+                                                                        <img className="w-8 h-8 rounded-xl object-cover ring-4 ring-paper-white shadow-xl group-hover/user:scale-110 transition-transform" src={assignee?.avatar} alt="assignee" />
                                                                         <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest opacity-0 group-hover/user:opacity-100 transition-opacity">
                                                                             {assignee?.name.split(' ')[0]}
                                                                         </span>

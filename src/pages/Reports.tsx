@@ -14,7 +14,7 @@ export const Reports: React.FC = () => {
                     <h2 className="text-4xl text-midnight tracking-tight">Performance Reports</h2>
                     <p className="text-slate-500 font-medium mt-1 uppercase text-[10px] tracking-[0.2em]">Updated 14 minutes ago • Sprint 42 Focus</p>
                 </div>
-                <button className="flex items-center gap-3 bg-midnight text-white px-10 py-5 rounded-[1.5rem] text-[11px] font-black uppercase tracking-widest shadow-2xl shadow-midnight/30 hover:-translate-y-1 transition-all active:scale-95 group leading-none">
+                <button className="flex items-center gap-3 bg-primary text-white px-10 py-5 rounded-[1.5rem] text-[11px] font-black uppercase tracking-widest shadow-2xl shadow-primary/30 hover:-translate-y-1 transition-all active:scale-95 group leading-none">
                     <Download className="w-4 h-4 group-hover:translate-y-1 transition-transform" />
                     Export All Data
                 </button>
@@ -85,7 +85,7 @@ export const Reports: React.FC = () => {
 
                 {/* Secondary Charts */}
                 <div className="lg:col-span-4 flex flex-col gap-8">
-                    <div className="bg-midnight text-white p-10 rounded-[3rem] shadow-2xl shadow-midnight/30 flex-1 relative overflow-hidden group">
+                    <div className="bg-ink-navy text-white p-10 rounded-[3rem] shadow-2xl shadow-midnight/30 flex-1 relative overflow-hidden group">
                         <div className="absolute bottom-0 right-0 w-48 h-48 bg-primary/20 rounded-full blur-[80px] translate-y-1/2 translate-x-1/2 group-hover:scale-150 transition-transform duration-1000" />
                         <div className="relative z-10">
                             <h3 className="text-xl font-black tracking-tight italic">Task Distribution</h3>

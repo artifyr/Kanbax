@@ -20,7 +20,7 @@ export const Navbar: React.FC<Props> = ({ onCreateTask }) => {
                     <input
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full bg-paper-white/80 border border-midnight/[0.03] focus:ring-4 focus:ring-primary/5 rounded-[1.5rem] pl-14 pr-6 py-4 text-sm font-bold placeholder-slate-400 outline-none transition-all duration-500 focus:bg-white focus:shadow-2xl focus:shadow-midnight/5 group-hover:bg-white"
+                        className="w-full bg-paper-white/80 border border-midnight/[0.03] focus:ring-4 focus:ring-primary/5 rounded-[1.5rem] pl-14 pr-6 py-4 text-sm font-bold placeholder-slate-400 outline-none transition-all duration-500 focus:bg-paper-white focus:shadow-2xl focus:shadow-midnight/5 group-hover:bg-paper-white/90"
                         placeholder="Universal Search (Tasks, Users, Documentation...)"
                         type="text"
                     />
@@ -37,11 +37,11 @@ export const Navbar: React.FC<Props> = ({ onCreateTask }) => {
                             setShowNotifications(!showNotifications);
                             if (!showNotifications) clearUnread();
                         }}
-                        className="w-12 h-12 flex items-center justify-center text-slate-400 hover:text-midnight bg-paper-white/50 hover:bg-white rounded-2xl transition-all relative group border border-midnight/[0.03] shadow-sm active:scale-90"
+                        className="w-12 h-12 flex items-center justify-center text-slate-400 hover:text-primary bg-paper-white/50 hover:bg-paper-white rounded-2xl transition-all relative group border border-midnight/[0.03] shadow-sm active:scale-90"
                     >
                         <Bell className="w-5 h-5 group-hover:rotate-[15deg] transition-transform" />
                         {unreadNotifications > 0 && (
-                            <span className="absolute top-3.5 right-3.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white animate-bounce shadow-lg shadow-red-500/20"></span>
+                            <span className="absolute top-3.5 right-3.5 w-2 h-2 bg-red-500 rounded-full border-2 border-paper-white animate-bounce shadow-lg shadow-red-500/20"></span>
                         )}
                     </button>
 
@@ -75,7 +75,7 @@ export const Navbar: React.FC<Props> = ({ onCreateTask }) => {
                         </div>
                     )}
 
-                    <button className="w-12 h-12 flex items-center justify-center text-slate-400 hover:text-midnight bg-paper-white/50 hover:bg-white rounded-2xl transition-all group border border-midnight/[0.03] shadow-sm active:scale-90">
+                    <button className="w-12 h-12 flex items-center justify-center text-slate-400 hover:text-primary bg-paper-white/50 hover:bg-paper-white rounded-2xl transition-all group border border-midnight/[0.03] shadow-sm active:scale-90">
                         <LayoutGrid className="w-5 h-5 group-hover:rotate-90 transition-transform" />
                     </button>
                 </div>

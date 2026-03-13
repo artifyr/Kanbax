@@ -74,7 +74,7 @@ export const Profile: React.FC = () => {
                                 type="text"
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
-                                className="w-full bg-foggy-blue/40 border-none rounded-2xl px-6 py-4.5 text-sm font-extrabold text-midnight focus:bg-white focus:ring-8 focus:ring-primary/5 transition-all outline-none border-2 border-transparent focus:border-primary/20 shadow-sm"
+                                className="w-full bg-foggy-blue/40 border-none rounded-2xl px-6 py-4.5 text-sm font-extrabold text-midnight focus:bg-paper-white focus:ring-8 focus:ring-primary/5 transition-all outline-none border-2 border-transparent focus:border-primary/20 shadow-sm"
                             />
                         </div>
                         <div className="space-y-2.5">
@@ -83,7 +83,7 @@ export const Profile: React.FC = () => {
                                 type="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="w-full bg-foggy-blue/40 border-none rounded-2xl px-6 py-4.5 text-sm font-extrabold text-midnight focus:bg-white focus:ring-8 focus:ring-primary/5 transition-all outline-none border-2 border-transparent focus:border-primary/20 shadow-sm"
+                                className="w-full bg-foggy-blue/40 border-none rounded-2xl px-6 py-4.5 text-sm font-extrabold text-midnight focus:bg-paper-white focus:ring-8 focus:ring-primary/5 transition-all outline-none border-2 border-transparent focus:border-primary/20 shadow-sm"
                             />
                         </div>
                         <div className="space-y-2.5">
@@ -92,7 +92,7 @@ export const Profile: React.FC = () => {
                                 type="text"
                                 value={role}
                                 onChange={(e) => setRole(e.target.value)}
-                                className="w-full bg-foggy-blue/40 border-none rounded-2xl px-6 py-4.5 text-sm font-extrabold text-midnight focus:bg-white focus:ring-8 focus:ring-primary/5 transition-all outline-none border-2 border-transparent focus:border-primary/20 shadow-sm"
+                                className="w-full bg-foggy-blue/40 border-none rounded-2xl px-6 py-4.5 text-sm font-extrabold text-midnight focus:bg-paper-white focus:ring-8 focus:ring-primary/5 transition-all outline-none border-2 border-transparent focus:border-primary/20 shadow-sm"
                             />
                         </div>
                         <div className="space-y-2.5">
@@ -101,7 +101,7 @@ export const Profile: React.FC = () => {
                                 type="text"
                                 value={company}
                                 onChange={(e) => setCompany(e.target.value)}
-                                className="w-full bg-foggy-blue/40 border-none rounded-2xl px-6 py-4.5 text-sm font-extrabold text-midnight focus:bg-white focus:ring-8 focus:ring-primary/5 transition-all outline-none border-2 border-transparent focus:border-primary/20 shadow-sm"
+                                className="w-full bg-foggy-blue/40 border-none rounded-2xl px-6 py-4.5 text-sm font-extrabold text-midnight focus:bg-paper-white focus:ring-8 focus:ring-primary/5 transition-all outline-none border-2 border-transparent focus:border-primary/20 shadow-sm"
                             />
                         </div>
                     </div>
@@ -122,7 +122,7 @@ export const Profile: React.FC = () => {
                                 onClick={() => setTheme('dark')}
                                 className={`p-5 rounded-3xl transition-all hover:scale-[1.02] flex flex-col items-center gap-4 ${theme === 'dark' ? 'bg-paper-white border-[3px] border-primary/40 ring-8 ring-primary/5' : 'bg-paper-white/30 border border-midnight/[0.05]'}`}
                             >
-                                <div className="w-full aspect-video bg-midnight/90 rounded-2xl border border-midnight/10 shadow-xl flex items-center justify-center">
+                                <div className="w-full aspect-video bg-[#0f172a] rounded-2xl border border-white/10 shadow-xl flex items-center justify-center">
                                     <Moon className={`w-6 h-6 ${theme === 'dark' ? 'text-primary' : 'text-slate-300'}`} />
                                 </div>
                                 <span className={`text-[11px] font-black uppercase tracking-[0.15em] ${theme === 'dark' ? 'text-primary' : 'text-slate-400'}`}>Dark Ink</span>

@@ -35,13 +35,13 @@ export const Dashboard: React.FC = () => {
                     <div className="flex gap-4">
                         <button
                             onClick={() => setCreateModalOpen(true)}
-                            className="bg-midnight text-white px-10 py-5 rounded-2xl text-[11px] font-black uppercase tracking-widest shadow-2xl active:scale-95"
+                            className="bg-primary text-white px-10 py-5 rounded-2xl text-[11px] font-black uppercase tracking-widest shadow-2xl active:scale-95 hover:brightness-110 transition-all"
                         >
                             Quick Create
                         </button>
                         <button
                             onClick={() => navigate('/backlog')}
-                            className="bg-white border border-midnight/5 text-midnight px-10 py-5 rounded-2xl text-[11px] font-black uppercase tracking-widest shadow-soft active:scale-95 transition-all"
+                            className="bg-paper-white border border-midnight/10 text-midnight px-10 py-5 rounded-2xl text-[11px] font-black uppercase tracking-widest shadow-soft active:scale-95 transition-all hover:bg-canvas-white"
                         >
                             Explore Backlog
                         </button>
@@ -137,7 +137,7 @@ export const Dashboard: React.FC = () => {
                 </div>
 
                 {/* Backlog Health */}
-                <div className="lg:col-span-5 bg-midnight text-white p-10 rounded-[3.5rem] shadow-2xl relative overflow-hidden group">
+                <div className="lg:col-span-5 bg-ink-navy text-white p-10 rounded-[3.5rem] shadow-2xl relative overflow-hidden group">
                     <div className="relative z-10 flex flex-col h-full justify-between">
                         <div>
                             <AlertCircle className="w-6 h-6 text-red-400 mb-8" />
@@ -156,8 +156,8 @@ export const Dashboard: React.FC = () => {
                 <div className="lg:col-span-3 bg-paper-white p-8 rounded-[2.5rem] shadow-soft border border-midnight/5 flex flex-col items-center justify-center text-center">
                     <div className="relative w-40 h-40 flex items-center justify-center mb-6">
                         <svg className="w-full h-full transform -rotate-90">
-                            <circle cx="80" cy="80" r="70" fill="none" stroke="#f1f5f9" strokeWidth="12" />
-                            <circle cx="80" cy="80" r="70" fill="none" stroke="#0059ba" strokeWidth="12" strokeDasharray="440" strokeDashoffset={440 - (440 * healthPercentage / 100)} strokeLinecap="round" />
+                            <circle cx="80" cy="80" r="70" fill="none" stroke="currentColor" className="text-midnight/5" strokeWidth="12" />
+                            <circle cx="80" cy="80" r="70" fill="none" stroke="currentColor" className="text-primary" strokeWidth="12" strokeDasharray="440" strokeDashoffset={440 - (440 * healthPercentage / 100)} strokeLinecap="round" />
                         </svg>
                         <div className="absolute flex flex-col">
                             <span className="text-3xl font-black text-midnight tracking-tighter tabular-nums">{healthPercentage}%</span>
