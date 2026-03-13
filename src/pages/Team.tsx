@@ -1,9 +1,18 @@
-import React from 'react';
-import { UserPlus, MoreHorizontal, ChevronRight, CheckCircle2, Clock, Plus } from 'lucide-react';
+import React, { useState } from 'react';
+import { UserPlus, MoreHorizontal, ChevronRight, CheckCircle2, Plus, Trash2, Mail, ExternalLink } from 'lucide-react';
 import { useTaskStore } from '../hooks/useTaskStore';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export const Team: React.FC = () => {
-    const { users, tasks } = useTaskStore();
+    const { users, tasks, removeUser, currentUser } = useTaskStore();
+    const [activeMenu, setActiveMenu] = useState<string | null>(null);
+
+    const handleDelete = (userId: string) => {
+        if (window.confirm('Are you sure you want to remove this team member? Their assigned tasks will remain but will become unassigned.')) {
+            removeUser(userId);
+            setActiveMenu(null);
+        }
+    };
 
     return (
         <div className="space-y-12 animate-soft-in">
@@ -36,15 +45,55 @@ export const Team: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                {users.map((member, i) => {
+                {users.map((member) => {
                     const memberTasks = tasks.filter(t => t.assigneeId === member.id).length;
-                    const capacity = Math.min(100, (memberTasks / 5) * 100); // Mock capacity logic
+                    const capacity = Math.min(100, (memberTasks / 5) * 100); 
 
                     return (
-                        <div key={i} className="bg-paper-white rounded-[2.5rem] p-8 shadow-soft border border-midnight/5 group hover:border-primary/20 hover:shadow-2xl transition-all duration-500 relative overflow-hidden backdrop-blur-sm">
-                            <div className="absolute top-0 right-0 p-5 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <button className="text-slate-300 hover:text-midnight transition-colors p-2 hover:bg-canvas-white rounded-lg"><MoreHorizontal className="w-4 h-4" /></button>
+                        <div key={member.id} className="bg-paper-white rounded-[2.5rem] p-8 shadow-soft border border-midnight/5 group hover:border-primary/20 hover:shadow-2xl transition-all duration-500 relative overflow-hidden backdrop-blur-sm">
+                            <div className="absolute top-0 right-0 p-5 opacity-0 group-hover:opacity-100 transition-opacity z-20">
+                                <div className="relative">
+                                    <button 
+                                        onClick={() => setActiveMenu(activeMenu === member.id ? null : member.id)}
+                                        className={`text-slate-300 hover:text-midnight transition-colors p-2 rounded-lg ${activeMenu === member.id ? 'bg-canvas-white text-midnight' : 'hover:bg-canvas-white'}`}
+                                    >
+                                        <MoreHorizontal className="w-4 h-4" />
+                                    </button>
+                                    
+                                    <AnimatePresence>
+                                        {activeMenu === member.id && (
+                                            <motion.div
+                                                initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                                                animate={{ opacity: 1, scale: 1, y: 0 }}
+                                                exit={{ opacity: 0, scale: 0.95, y: 10 }}
+                                                className="absolute right-0 mt-2 w-48 bg-white rounded-2xl shadow-2xl border border-midnight/5 overflow-hidden z-30"
+                                            >
+                                                <div className="p-2 space-y-1">
+                                                    <button className="w-full flex items-center gap-3 px-4 py-2.5 text-[10px] font-black uppercase tracking-widest text-slate-500 hover:bg-canvas-white hover:text-midnight rounded-xl transition-all">
+                                                        <Mail className="w-3.5 h-3.5" /> Message
+                                                    </button>
+                                                    <button className="w-full flex items-center gap-3 px-4 py-2.5 text-[10px] font-black uppercase tracking-widest text-slate-500 hover:bg-canvas-white hover:text-midnight rounded-xl transition-all">
+                                                        <ExternalLink className="w-3.5 h-3.5" /> Profile
+                                                    </button>
+                                                    <div className="h-px bg-midnight/[0.03] mx-2 my-1" />
+                                                    <button 
+                                                        disabled={currentUser?.id === member.id}
+                                                        onClick={() => handleDelete(member.id)}
+                                                        className={`w-full flex items-center gap-3 px-4 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all 
+                                                            ${currentUser?.id === member.id 
+                                                                ? 'opacity-30 cursor-not-allowed text-slate-400' 
+                                                                : 'text-red-500 hover:bg-red-500/10'}`}
+                                                    >
+                                                        <Trash2 className="w-3.5 h-3.5" /> Remove member
+                                                    </button>
+                                                </div>
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
+                                </div>
                             </div>
+                            
+                            {/* Card Content */}
                             <div className="flex flex-col items-center text-center">
                                 <div className="relative mb-6">
                                     <div className="w-28 h-28 rounded-full border-[6px] border-canvas-white shadow-xl overflow-hidden group-hover:rotate-6 transition-transform duration-500">
@@ -86,8 +135,10 @@ export const Team: React.FC = () => {
                     );
                 })}
 
-                {/* Placeholder Member */}
-                <div className="bg-canvas-white/30 rounded-[2.5rem] border-2 border-dashed border-midnight/10 flex flex-col items-center justify-center p-8 cursor-pointer hover:bg-paper-white hover:border-primary/30 transition-all group min-h-[360px] active:scale-95 duration-300">
+                <div 
+                    onClick={() => {}}
+                    className="bg-canvas-white/30 rounded-[2.5rem] border-2 border-dashed border-midnight/10 flex flex-col items-center justify-center p-8 cursor-pointer hover:bg-paper-white hover:border-primary/30 transition-all group min-h-[360px] active:scale-95 duration-300"
+                >
                     <div className="w-16 h-16 rounded-full bg-midnight/5 flex items-center justify-center mb-6 group-hover:bg-primary group-hover:scale-110 transition-all shadow-sm">
                         <Plus className="w-7 h-7 text-slate-300 group-hover:text-white transition-colors" />
                     </div>

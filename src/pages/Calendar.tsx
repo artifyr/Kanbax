@@ -6,10 +6,7 @@ import {
     Info, 
     ArrowRight, 
     Plus, 
-    Activity,
-    Clock,
-    User,
-    MoreHorizontal
+    Activity
 } from 'lucide-react';
 import { 
     format, 
@@ -24,26 +21,51 @@ import {
     addDays, 
     eachDayOfInterval,
     parseISO,
-    isToday
+    isToday,
+    addWeeks,
+    subWeeks
 } from 'date-fns';
 import { useTaskStore } from '../hooks/useTaskStore';
 
+type ViewMode = 'month' | 'week' | 'day';
+
 export const Calendar: React.FC = () => {
-    const { tasks, users, setSelectedTaskId } = useTaskStore();
-    const [currentMonth, setCurrentMonth] = useState(new Date());
+    const { tasks, users, setSelectedTaskId, setCreateModalOpen, setInitialDueDate } = useTaskStore();
+    const [viewDate, setViewDate] = useState(new Date());
+    const [viewMode, setViewMode] = useState<ViewMode>('month');
 
-    const nextMonth = () => setCurrentMonth(addMonths(currentMonth, 1));
-    const prevMonth = () => setCurrentMonth(subMonths(currentMonth, 1));
+    const handleNext = () => {
+        if (viewMode === 'month') setViewDate(addMonths(viewDate, 1));
+        else if (viewMode === 'week') setViewDate(addWeeks(viewDate, 1));
+        else setViewDate(addDays(viewDate, 1));
+    };
 
-    const monthStart = startOfMonth(currentMonth);
-    const monthEnd = endOfMonth(monthStart);
-    const startDate = startOfWeek(monthStart);
-    const endDate = endOfWeek(monthEnd);
+    const handlePrev = () => {
+        if (viewMode === 'month') setViewDate(subMonths(viewDate, 1));
+        else if (viewMode === 'week') setViewDate(subWeeks(viewDate, 1));
+        else setViewDate(addDays(viewDate, -1));
+    };
 
-    const calendarDays = eachDayOfInterval({
-        start: startDate,
-        end: endDate,
-    });
+    const getCalendarDays = () => {
+        if (viewMode === 'month') {
+            const monthStart = startOfMonth(viewDate);
+            const monthEnd = endOfMonth(monthStart);
+            return eachDayOfInterval({
+                start: startOfWeek(monthStart, { weekStartsOn: 1 }),
+                end: endOfWeek(monthEnd, { weekStartsOn: 1 }),
+            });
+        } else if (viewMode === 'week') {
+            const weekStart = startOfWeek(viewDate, { weekStartsOn: 1 });
+            return eachDayOfInterval({
+                start: weekStart,
+                end: addDays(weekStart, 6),
+            });
+        } else {
+            return [viewDate];
+        }
+    };
+
+    const calendarDays = getCalendarDays();
 
     const getTasksForDay = (day: Date) => {
         return tasks.filter(task => {
@@ -54,6 +76,11 @@ export const Calendar: React.FC = () => {
                 return false;
             }
         });
+    };
+
+    const handleAddTask = (day: Date) => {
+        setInitialDueDate(format(day, 'yyyy-MM-dd'));
+        setCreateModalOpen(true);
     };
 
     return (
@@ -67,34 +94,43 @@ export const Calendar: React.FC = () => {
                         <span className="text-primary font-bold">Project Scheduler</span>
                     </div>
                     <h2 className="text-4xl text-midnight tracking-tight italic">
-                        {format(currentMonth, 'MMMM yyyy')}
+                        {viewMode === 'day' ? format(viewDate, 'MMMM d, yyyy') : format(viewDate, 'MMMM yyyy')}
                     </h2>
                     <p className="text-slate-500 font-medium mt-1 uppercase text-[10px] tracking-[0.2em]">
-                        {tasks.filter(t => t.dueDate && isSameMonth(parseISO(t.dueDate), currentMonth)).length} tasks scheduled this month
+                        {viewMode === 'day' 
+                            ? `${getTasksForDay(viewDate).length} tasks scheduled today`
+                            : `${tasks.filter(t => t.dueDate && isSameMonth(parseISO(t.dueDate), viewDate)).length} tasks scheduled this month`
+                        }
                     </p>
                 </div>
 
                 <div className="flex items-center gap-4">
                     <div className="bg-paper-white p-1 rounded-xl flex gap-1 border border-midnight/[0.03] shadow-sm">
-                        <button className="px-5 py-2 rounded-lg text-xs font-black uppercase tracking-widest bg-canvas-white text-primary shadow-inner">Month</button>
-                        <button className="px-5 py-2 rounded-lg text-xs font-extrabold uppercase tracking-widest text-slate-400 hover:text-midnight transition-all">Week</button>
-                        <button className="px-5 py-2 rounded-lg text-xs font-extrabold uppercase tracking-widest text-slate-400 hover:text-midnight transition-all">Day</button>
+                        {(['month', 'week', 'day'] as ViewMode[]).map(mode => (
+                            <button 
+                                key={mode}
+                                onClick={() => setViewMode(mode)}
+                                className={`px-5 py-2 rounded-lg text-xs font-black uppercase tracking-widest transition-all ${viewMode === mode ? 'bg-canvas-white text-primary shadow-inner' : 'text-slate-400 hover:text-midnight'}`}
+                            >
+                                {mode}
+                            </button>
+                        ))}
                     </div>
                     <div className="flex items-center gap-2">
                         <button 
-                            onClick={prevMonth}
+                            onClick={handlePrev}
                             className="p-2.5 bg-paper-white hover:bg-canvas-white rounded-xl text-slate-400 hover:text-midnight transition-colors border border-midnight/[0.03] shadow-sm"
                         >
                             <ChevronLeft className="w-4 h-4" />
                         </button>
                         <button 
-                            onClick={() => setCurrentMonth(new Date())}
+                            onClick={() => setViewDate(new Date())}
                             className="px-6 py-2.5 bg-paper-white hover:bg-canvas-white rounded-xl text-[11px] font-black uppercase tracking-widest text-midnight border border-midnight/[0.03] shadow-sm active:scale-95 transition-all text-center"
                         >
                             Today
                         </button>
                         <button 
-                            onClick={nextMonth}
+                            onClick={handleNext}
                             className="p-2.5 bg-paper-white hover:bg-canvas-white rounded-xl text-slate-400 hover:text-midnight transition-colors border border-midnight/[0.03] shadow-sm"
                         >
                             <ChevronRight className="w-4 h-4" />
@@ -105,16 +141,20 @@ export const Calendar: React.FC = () => {
 
             {/* Calendar Grid */}
             <div className="bg-paper-white rounded-[2.5rem] overflow-hidden shadow-soft border border-midnight/5">
-                <div className="grid grid-cols-7 border-b border-midnight/[0.03] bg-canvas-white/30 backdrop-blur-sm">
-                    {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(day => (
-                        <div key={day} className="py-4 text-center text-[10px] font-black uppercase tracking-[0.3em] text-slate-400/80">{day}</div>
-                    ))}
+                <div className={`grid ${viewMode === 'day' ? 'grid-cols-1' : 'grid-cols-7'} border-b border-midnight/[0.03] bg-canvas-white/30 backdrop-blur-sm`}>
+                    {viewMode === 'day' ? (
+                        <div className="py-4 text-center text-[10px] font-black uppercase tracking-[0.3em] text-slate-400/80">{format(viewDate, 'EEEE')}</div>
+                    ) : (
+                        ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(day => (
+                            <div key={day} className="py-4 text-center text-[10px] font-black uppercase tracking-[0.3em] text-slate-400/80">{day}</div>
+                        ))
+                    )}
                 </div>
 
-                <div className="grid grid-cols-7 auto-rows-[minmax(140px,auto)] gap-[1px] bg-midnight/[0.03]">
+                <div className={`grid ${viewMode === 'day' ? 'grid-cols-1' : 'grid-cols-7'} auto-rows-[minmax(140px,auto)] gap-[1px] bg-midnight/[0.03]`}>
                     {calendarDays.map((day, i) => {
                         const dayTasks = getTasksForDay(day);
-                        const isCurrentM = isSameMonth(day, monthStart);
+                        const isCurrentM = viewMode === 'month' ? isSameMonth(day, viewDate) : true;
                         const isTdy = isToday(day);
 
                         return (
@@ -123,7 +163,7 @@ export const Calendar: React.FC = () => {
                                 ${isTdy ? 'ring-2 ring-primary ring-inset z-10' : ''}`}>
                                 
                                 <span className={`text-xs font-black tracking-tight ${isTdy ? 'text-primary' : 'text-midnight/60'}`}>
-                                    {format(day, 'd')}
+                                    {viewMode === 'day' ? format(day, 'MMMM d') : format(day, 'd')}
                                 </span>
 
                                 <div className="mt-4 space-y-2">
@@ -144,7 +184,8 @@ export const Calendar: React.FC = () => {
                                 </div>
 
                                 <button 
-                                    className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity p-1.5 bg-white rounded-lg shadow-sm border border-midnight/5"
+                                    onClick={() => handleAddTask(day)}
+                                    className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity p-1.5 bg-white rounded-lg shadow-sm border border-midnight/5 active:scale-90"
                                 >
                                     <Plus className="w-3.5 h-3.5 text-slate-400 hover:text-primary" />
                                 </button>
@@ -156,12 +197,12 @@ export const Calendar: React.FC = () => {
 
             {/* Bottom Info Bento */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div className="bg-paper-white p-8 rounded-[2rem] shadow-soft border border-midnight/5 flex flex-col justify-between group hover:border-primary/20 transition-all">
+                <div className="bg-ink-navy p-8 rounded-[2rem] shadow-2xl border border-white/5 flex flex-col justify-between group hover:border-primary/20 transition-all text-white">
                     <div>
                         <div className="w-12 h-12 bg-primary/10 text-primary rounded-2xl flex items-center justify-center mb-6 ring-8 ring-primary/5">
                             <CalendarIcon className="w-6 h-6" />
                         </div>
-                        <h3 className="text-xl font-black text-midnight tracking-tight italic">Upcoming Priority</h3>
+                        <h3 className="text-xl font-black text-white tracking-tight italic">Upcoming Priority</h3>
                         {tasks.filter(t => t.priority === 'critical' && t.status !== 'done').length > 0 ? (
                             <p className="text-xs font-bold text-slate-400 mt-3 leading-relaxed">
                                 Next critical task: <span className="text-primary font-black uppercase tracking-widest">
@@ -177,12 +218,12 @@ export const Calendar: React.FC = () => {
                     </button>
                 </div>
 
-                <div className="bg-paper-white p-8 rounded-[2rem] shadow-soft border border-midnight/5 flex flex-col justify-between hover:border-mustard/20 transition-all">
+                <div className="bg-ink-navy p-8 rounded-[2rem] shadow-2xl border border-white/5 flex flex-col justify-between hover:border-mustard/20 transition-all text-white">
                     <div>
                         <div className="w-12 h-12 bg-mustard/10 text-mustard rounded-2xl flex items-center justify-center mb-6 ring-8 ring-mustard/5">
                             <Info className="w-6 h-6" />
                         </div>
-                        <h3 className="text-xl font-black text-midnight tracking-tight italic">Resource Insights</h3>
+                        <h3 className="text-xl font-black text-white tracking-tight italic">Resource Insights</h3>
                         <p className="text-xs font-bold text-slate-400 mt-3 leading-relaxed">
                             Team is currently at <span className="text-mustard font-black uppercase tracking-widest">optimum capacity</span>. No overlapping conflicts detected in current sprint.
                         </p>
@@ -197,13 +238,13 @@ export const Calendar: React.FC = () => {
                     </div>
                 </div>
 
-                <div className="bg-paper-white p-8 rounded-[2rem] shadow-soft border border-midnight/5 flex flex-col justify-between group hover:border-primary/20 transition-all">
+                <div className="bg-ink-navy p-8 rounded-[2rem] shadow-2xl border border-white/5 flex flex-col justify-between group hover:border-primary/20 transition-all text-white">
                     <div>
                         <div className="w-12 h-12 bg-primary/10 text-primary rounded-2xl flex items-center justify-center mb-6 ring-8 ring-primary/5">
                             <Activity className="w-6 h-6" />
                         </div>
-                        <h3 className="text-xl font-black text-midnight tracking-tight italic">Sprint 42 Health</h3>
-                        <div className="mt-10 flex items-end gap-3 text-midnight">
+                        <h3 className="text-xl font-black text-white tracking-tight italic">Sprint 42 Health</h3>
+                        <div className="mt-10 flex items-end gap-3 text-white">
                             <span className="text-5xl font-black tracking-tighter italic tabular-nums">
                                 {Math.round((tasks.filter(t => t.status === 'done').length / (tasks.length || 1)) * 100)}%
                             </span>

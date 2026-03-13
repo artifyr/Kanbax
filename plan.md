@@ -32,15 +32,17 @@ This document outlines the detailed strategy to transition our premium React pro
 
 ---
 
-## ✨ Phase 3: Interactive Workspace (Dynamics)
+## ✨ Phase 3: Interactive Workspace (Dynamics) (COMPLETED)
 **Goal:** Add high-end interactive behaviors.
 
 - [x] **Drag-and-Drop Kanban**: Implement `@hello-pangea/dnd` in `ActiveSprints.tsx` (Verified).
 - [x] **Inline Editing**: Add "Click to Edit" for task titles/descriptions in the Kanban cards (Integrated into Detail Drawer).
 - [x] **Task Detail Side-Panel**: Create a slide-out drawer to view/edit comments and attachments without page navigation.
 - [x] **Calendar Integration**: Implemented full calendar logic with `date-fns`.
+- [x] **Calendar View Modes**: Added Month, Week, and Day layouts.
+- [x] **Calendar Creation**: Tasks can be created directly from the day cell with pre-filled dates.
 - [x] **Task Scheduling**: Tasks with `dueDate` now populate automatically in the calendar.
-- [x] **Task List Transformation**: Rebranded Backlog to a multi-view Task List.
+- [x] **Team Management**: Enabled member deletion with task persistence and self-deletion checks.
 
 ---
 

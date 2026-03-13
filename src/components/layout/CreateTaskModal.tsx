@@ -10,7 +10,7 @@ interface Props {
 }
 
 export const CreateTaskModal: React.FC<Props> = ({ isOpen, onClose }) => {
-    const { addTask, users, currentUser } = useTaskStore();
+    const { addTask, users, currentUser, initialDueDate, setInitialDueDate } = useTaskStore();
 
     // Form State
     const [title, setTitle] = useState('');
@@ -19,7 +19,7 @@ export const CreateTaskModal: React.FC<Props> = ({ isOpen, onClose }) => {
     const [assigneeId, setAssigneeId] = useState<string>('');
     const [tags, setTags] = useState<string[]>(['Design']);
     const [attachments, setAttachments] = useState<string[]>([]);
-    const [dueDate, setDueDate] = useState<string>(new Date().toISOString().split('T')[0]);
+    const [dueDate, setDueDate] = useState<string>(initialDueDate || new Date().toISOString().split('T')[0]);
 
     // UI State for custom dropdowns
     const [showAssigneeDropdown, setShowAssigneeDropdown] = useState(false);
@@ -34,9 +34,12 @@ export const CreateTaskModal: React.FC<Props> = ({ isOpen, onClose }) => {
             setAssigneeId(users[0]?.id || '');
             setTags(['Design']);
             setAttachments([]);
-            setDueDate(new Date().toISOString().split('T')[0]);
+            setDueDate(initialDueDate || new Date().toISOString().split('T')[0]);
+        } else {
+            // Reset initial date when modal is fully closed/after creation
+            setInitialDueDate(null);
         }
-    }, [isOpen, users]);
+    }, [isOpen, users, initialDueDate, setInitialDueDate]);
 
     const handleCreate = () => {
         if (!title.trim()) return;

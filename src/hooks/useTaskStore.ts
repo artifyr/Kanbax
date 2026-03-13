@@ -13,6 +13,7 @@ interface TaskState {
     theme: 'light' | 'dark';
     unreadNotifications: number;
     selectedTaskId: string | null;
+    initialDueDate: string | null;
 
     // Actions
     addTask: (task: Omit<Task, 'id' | 'createdAt' | 'updatedAt' | 'comments'>) => void;
@@ -29,6 +30,8 @@ interface TaskState {
     addActivity: (activity: Omit<ActivityLog, 'id' | 'time'>) => void;
 
     setCurrentUser: (user: User) => void;
+    removeUser: (userId: string) => void;
+    setInitialDueDate: (date: string | null) => void;
 }
 
 // Initial Mock Data
@@ -164,6 +167,7 @@ export const useTaskStore = create<TaskState>()(
             theme: 'light',
             unreadNotifications: 2,
             selectedTaskId: null,
+            initialDueDate: null,
 
             addTask: (taskData) => set((state) => {
                 const newTask: Task = {
@@ -272,7 +276,30 @@ export const useTaskStore = create<TaskState>()(
             })),
             setTheme: (theme) => set({ theme }),
             clearUnread: () => set({ unreadNotifications: 0 }),
-            setSelectedTaskId: (selectedTaskId) => set({ selectedTaskId })
+            setSelectedTaskId: (selectedTaskId) => set({ selectedTaskId }),
+            setInitialDueDate: (initialDueDate) => set({ initialDueDate }),
+            removeUser: (userId) => set((state) => {
+                // Don't allow deleting current user
+                if (state.currentUser?.id === userId) return state;
+
+                const deletedMember = state.users.find(u => u.id === userId);
+                if (!deletedMember) return state;
+
+                const newActivity: ActivityLog = {
+                    id: Math.random().toString(36).substr(2, 9),
+                    userId: state.currentUser?.id || 'system',
+                    action: 'removed team member',
+                    target: deletedMember.name,
+                    time: new Date().toISOString(),
+                    type: 'warning'
+                };
+
+                return {
+                    users: state.users.filter(u => u.id !== userId),
+                    activities: [newActivity, ...state.activities],
+                    unreadNotifications: state.unreadNotifications + 1
+                };
+            })
         }),
         {
             name: 'kanbax-storage'
