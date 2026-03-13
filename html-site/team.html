@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sprinto Team Management Overview</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#136dec",
+                        "background-light": "#f9f9ff",
+                        "background-dark": "#101822",
+                        "sidebar": "#263143",
+                        "card-white": "#ffffff"
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"],
+                        "inter": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .gradient-blue {
+            background: linear-gradient(135deg, #136dec 0%, #3b82f6 100%);
+        }
+        .foggy-sky {
+            background-color: #f0f4f8;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
+<div class="flex h-screen overflow-hidden">
+<!-- Sidebar -->
+<aside class="w-64 bg-sidebar flex flex-col shrink-0">
+<div class="p-6 flex items-center gap-3">
+<div class="size-10 gradient-blue rounded-xl flex items-center justify-center text-white">
+<span class="material-symbols-outlined">rocket_launch</span>
+</div>
+<div class="flex flex-col">
+<h1 class="text-white text-lg font-extrabold leading-none">Sprinto</h1>
+<p class="text-slate-400 text-xs mt-1">Project Manager</p>
+</div>
+</div>
+<nav class="flex-1 px-4 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-300 hover:text-white hover:bg-white/10 rounded-lg transition-colors" href="index.html">Dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-300 hover:text-white hover:bg-white/10 rounded-lg transition-colors" href="active_sprints.html">Active Sprints</p>
+<div class="flex items-baseline gap-2">
+<span class="text-3xl font-extrabold">8</span>
+<span class="text-[#e73908] text-sm font-bold">-12%</span>
+</div>
+<div class="w-full h-1 bg-slate-100 rounded-full mt-2 overflow-hidden">
+<div class="w-1/2 h-full bg-orange-500"></div>
+</div>
+</div>
+<div class="bg-card-white p-6 rounded-xl border border-slate-100 shadow-sm flex flex-col gap-2">
+<p class="text-slate-500 text-sm font-medium uppercase tracking-wider font-inter">Blocked Tasks</p>
+<div class="flex items-baseline gap-2">
+<span class="text-3xl font-extrabold">3</span>
+<span class="text-[#07883b] text-sm font-bold">+5%</span>
+</div>
+<div class="w-full h-1 bg-slate-100 rounded-full mt-2 overflow-hidden">
+<div class="w-1/4 h-full bg-red-500"></div>
+</div>
+</div>
+</div>
+<!-- Workload Distribution -->
+<div>
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-xl font-bold">Workload Distribution</h3>
+<div class="flex gap-2">
+<button class="p-2 bg-slate-100 rounded hover:bg-slate-200 transition-colors">
+<span class="material-symbols-outlined text-sm">grid_view</span>
+</button>
+<button class="p-2 text-slate-400 hover:text-slate-600 transition-colors">
+<span class="material-symbols-outlined text-sm">format_list_bulleted</span>
+</button>
+</div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+<!-- Member Card 1 -->
+<div class="bg-card-white p-5 rounded-xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow group">
+<div class="flex justify-between items-start mb-4">
+<img class="size-12 rounded-full object-cover" data-alt="Portrait of a male team member" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCjpoxufy6kOLr0VYYGlXACwPQO35xkgSzlOtwjzyDECvZVfmSmLzkG1vLuu0v7CPIJsKzgRAKKSNFNWutMcl3yrozaA7GrK4iuXcxdwluV6Z64qO62NxwIwEP95LE_ieu7ck-vAuQhVz8mWtNtnElOooDeXi8sOMrq8IGMSJ7uC6DVg0zpue2HnOy2A-f3WXJKbXT9yujJPWbJiW0hHxGWkNe67DQhYkDoMNxGSn2jpIZlPHMXqxb5_jFl2yHOaFrA5jXaG21RsIt1"/>
+<span class="px-2 py-1 bg-[#91db2a]/10 text-[#548019] text-[10px] font-bold rounded uppercase">Available</span>
+</div>
+<h4 class="font-bold text-slate-900">Marcus Thorne</h4>
+<p class="text-slate-500 text-xs font-inter mb-4">Senior Designer</p>
+<div class="space-y-1.5">
+<div class="flex justify-between text-[10px] font-semibold">
+<span class="text-slate-400 uppercase">Workload Capacity</span>
+<span class="text-primary">45%</span>
+</div>
+<div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[45%]"></div>
+</div>
+</div>
+</div>
+<!-- Member Card 2 -->
+<div class="bg-card-white p-5 rounded-xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow group">
+<div class="flex justify-between items-start mb-4">
+<img class="size-12 rounded-full object-cover" data-alt="Portrait of a female team member" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5NpuFuWefWcNWmZoXlrixTlxXjN1KAqqOutUD-k7QmHmplZ6_02uAKAN0y280ITNoml_RA0BUV1oYQI9xGDmsC8v5HOMCE69p9IdCQC7Ao2fUxeVNRkFoQO_cy5fKZvKdGonQ85s_aEiOilWicosLYhOBPbnzG6szxAHQDufSp8bQSp-IuwYrbLrzkkvY-Xw3eNaVpcL1wuBLdElF6cENg4jKDWgfuJNllsQ_44d8B1n1D1HZYnApuy_np68Fy9G9kkqBG1EyuBWN"/>
+<span class="px-2 py-1 bg-[#fdc425]/10 text-[#9e7a17] text-[10px] font-bold rounded uppercase">Busy</span>
+</div>
+<h4 class="font-bold text-slate-900">Elena Rodriguez</h4>
+<p class="text-slate-500 text-xs font-inter mb-4">Lead Developer</p>
+<div class="space-y-1.5">
+<div class="flex justify-between text-[10px] font-semibold">
+<span class="text-slate-400 uppercase">Workload Capacity</span>
+<span class="text-mustard-600">88%</span>
+</div>
+<div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+<div class="bg-[#fdc425] h-full w-[88%]"></div>
+</div>
+</div>
+</div>
+<!-- Member Card 3 -->
+<div class="bg-card-white p-5 rounded-xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow group">
+<div class="flex justify-between items-start mb-4">
+<img class="size-12 rounded-full object-cover" data-alt="Portrait of a male team member" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZ0rSArR3GXRK167daMP3UC0ipbprATb_2-q59EzZB1uoVdPxI0NcEv13GX2wF4IGcn1ZNc0INXJQHSWKmJimeBiHarZVSmfO3A5J5G_8jK5owqTpsyZYGHDVsFZnMTlilmMhtFSSvx1yzfvXMf_uYguOOMTamQXCOVXy-0GFzqQlJbC6lywVV6tb-2hY4n9QVtV-UserjAMCJ7fGv6M7SWxHhiWrh3q9_dMPfOaFM5habSfj-6Gw1TcaQ4w5qo5IrtHQiQsBibIZ3"/>
+<span class="px-2 py-1 bg-[#fdc425]/10 text-[#9e7a17] text-[10px] font-bold rounded uppercase">Busy</span>
+</div>
+<h4 class="font-bold text-slate-900">David Chen</h4>
+<p class="text-slate-500 text-xs font-inter mb-4">Backend Engineer</p>
+<div class="space-y-1.5">
+<div class="flex justify-between text-[10px] font-semibold">
+<span class="text-slate-400 uppercase">Workload Capacity</span>
+<span class="text-mustard-600">92%</span>
+</div>
+<div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+<div class="bg-[#fdc425] h-full w-[92%]"></div>
+</div>
+</div>
+</div>
+<!-- Member Card 4 -->
+<div class="bg-card-white p-5 rounded-xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow group">
+<div class="flex justify-between items-start mb-4">
+<img class="size-12 rounded-full object-cover" data-alt="Portrait of a female team member" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtthykj8tfKaP075Z-rXloYjg0oIEznZ05sA9l6Kuy4ArnNoYN003WUb5JkfXh7JuHTNaqnqjkaKYUoMC0rWwFHEF07g7U3Py_3-QK3wdQpWnAjMArEC5slf5Brwz1EEmtsicxuToO13ktn5GNP5m1e1elosXrxS6AEchM_NGGsME0FGZz230zuG3QoCqs5BgWiYvTc2Eg1_D-lu9QMpQJNnzpMXUyq7U-2XqDfa1ZpCSrkcj7DWySqzMJ8Yeqd_zQrsvyEMbgjaRC"/>
+<span class="px-2 py-1 bg-[#91db2a]/10 text-[#548019] text-[10px] font-bold rounded uppercase">Available</span>
+</div>
+<h4 class="font-bold text-slate-900">Sophie Alpert</h4>
+<p class="text-slate-500 text-xs font-inter mb-4">Product Manager</p>
+<div class="space-y-1.5">
+<div class="flex justify-between text-[10px] font-semibold">
+<span class="text-slate-400 uppercase">Workload Capacity</span>
+<span class="text-primary">20%</span>
+</div>
+<div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[20%]"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Recent Achievements Section -->
+<div class="foggy-sky p-8 rounded-2xl border border-slate-200">
+<h3 class="text-xl font-bold mb-6">Recent Achievements</h3>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+<div class="flex items-start gap-4 p-4 bg-white rounded-xl shadow-sm border border-slate-100">
+<div class="size-12 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined">emoji_events</span>
+</div>
+<div>
+<h5 class="font-bold text-slate-900">Sprint Champion</h5>
+<p class="text-slate-500 text-sm mt-1">Elena Rodriguez completed 12 tasks this week without any bugs.</p>
+<span class="text-[10px] text-slate-400 font-bold uppercase mt-2 inline-block">2 Hours Ago</span>
+</div>
+</div>
+<div class="flex items-start gap-4 p-4 bg-white rounded-xl shadow-sm border border-slate-100">
+<div class="size-12 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 shrink-0">
+<span class="material-symbols-outlined">auto_awesome</span>
+</div>
+<div>
+<h5 class="font-bold text-slate-900">Milestone Reached</h5>
+<p class="text-slate-500 text-sm mt-1">Design team finalized the 'Apollo' branding 2 days ahead of schedule.</p>
+<span class="text-[10px] text-slate-400 font-bold uppercase mt-2 inline-block">Yesterday</span>
+</div>
+</div>
+</div>
+<div class="mt-8 flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
+<div class="shrink-0 flex items-center gap-2 px-4 py-2 bg-white rounded-full border border-slate-100 shadow-sm">
+<span class="material-symbols-outlined text-sm text-primary">verified</span>
+<span class="text-xs font-semibold">Q3 Target Hit</span>
+</div>
+<div class="shrink-0 flex items-center gap-2 px-4 py-2 bg-white rounded-full border border-slate-100 shadow-sm">
+<span class="material-symbols-outlined text-sm text-green-500">bolt</span>
+<span class="text-xs font-semibold">Fastest Launch</span>
+</div>
+<div class="shrink-0 flex items-center gap-2 px-4 py-2 bg-white rounded-full border border-slate-100 shadow-sm">
+<span class="material-symbols-outlined text-sm text-purple-500">stars</span>
+<span class="text-xs font-semibold">Customer Choice</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Content -->
+<footer class="mt-auto border-t border-slate-200 p-8 flex flex-col md:flex-row justify-between items-center gap-4 text-slate-400 text-sm font-inter">
+<p>© 2024 Sprinto. Architectural Canvas Design.</p>
+<div class="flex gap-6">
+<a class="hover:text-primary transition-colors" javascript:void(0)>Privacy Policy</a>
+<a class="hover:text-primary transition-colors" javascript:void(0)>Terms of Service</a>
+<a class="hover:text-primary transition-colors" javascript:void(0)>Support</a>
+</div>
+</footer>
+</main>
+</div>
+</body></html>

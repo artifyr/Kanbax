@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sprinto Project Management Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0059ba",
+                        "electric": "#0071e9",
+                        "ink-navy": "#263143",
+                        "canvas-white": "#f9f9ff",
+                        "foggy-blue": "#f0f3ff",
+                        "mustard": "#fdc425",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#0f1823",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"],
+                        "sans": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-canvas-white font-sans text-slate-900">
+<div class="flex h-screen overflow-hidden">
+<!-- Persistent Left Sidebar -->
+<aside class="w-64 bg-ink-navy flex flex-col h-full shrink-0">
+<div class="p-6 flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-electric flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-xl">rocket_launch</span>
+</div>
+<h1 class="font-display font-extrabold text-white text-xl tracking-tight">Sprinto</h1>
+</div>
+<nav class="flex-1 px-4 py-4 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 bg-white/10 text-white rounded-xl" href="index.html">Dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-white/60 hover:text-white hover:bg-white/5 rounded-xl transition-colors" href="index.html">Dashboard</h2>
+<p class="text-slate-500 font-medium mt-1">Monday, October 23, 2023 • <span class="text-primary">Sprint 42 Active</span></p>
+</div>
+<!-- Bento Grid -->
+<div class="grid grid-cols-12 gap-6">
+<!-- Weekly Velocity Card -->
+<div class="col-span-12 lg:col-span-8 bg-white rounded-3xl p-6 shadow-sm shadow-slate-200/50">
+<div class="flex items-center justify-between mb-6">
+<div>
+<h3 class="text-sm font-semibold text-slate-500 uppercase tracking-wider">Weekly Velocity</h3>
+<p class="text-3xl font-bold text-slate-900 mt-1">42 <span class="text-base font-medium text-slate-400">pts</span></p>
+</div>
+<div class="flex items-center gap-2 text-emerald-500 bg-emerald-50 px-3 py-1 rounded-full">
+<span class="material-symbols-outlined text-sm font-bold">trending_up</span>
+<span class="text-xs font-bold">+12% vs last week</span>
+</div>
+</div>
+<div class="h-[200px] w-full flex items-end gap-1">
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 500 150">
+<defs>
+<lineargradient id="velocityGradient" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#0059ba" stop-opacity="0.2"></stop>
+<stop offset="100%" stop-color="#0059ba" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+<path d="M0,120 Q50,110 80,90 T160,100 T240,40 T320,80 T400,30 T500,60 L500,150 L0,150 Z" fill="url(#velocityGradient)"></path>
+<path d="M0,120 Q50,110 80,90 T160,100 T240,40 T320,80 T400,30 T500,60" fill="none" stroke="#0059ba" stroke-linecap="round" stroke-width="3"></path>
+</svg>
+</div>
+<div class="flex justify-between px-2 mt-4 text-[11px] font-bold text-slate-400 uppercase tracking-widest">
+<span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+</div>
+</div>
+<!-- Critical Backlog Card -->
+<div class="col-span-12 lg:col-span-4 bg-mustard rounded-3xl p-6 flex flex-col justify-between">
+<div>
+<div class="w-12 h-12 rounded-2xl bg-black/10 flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-black/80">error</span>
+</div>
+<h3 class="text-black/60 text-sm font-semibold uppercase tracking-wider">Critical Backlog</h3>
+<p class="text-5xl font-extrabold text-black mt-2">14</p>
+</div>
+<div class="mt-4 flex items-center justify-between text-black/80 font-medium">
+<span>+3 items since 9 AM</span>
+<span class="material-symbols-outlined">arrow_forward</span>
+</div>
+</div>
+<!-- Team Throughput Bar Chart -->
+<div class="col-span-12 lg:col-span-7 bg-white rounded-3xl p-6 shadow-sm shadow-slate-200/50">
+<div class="flex items-center justify-between mb-8">
+<h3 class="text-sm font-semibold text-slate-500 uppercase tracking-wider">Team Throughput</h3>
+<div class="text-xs font-bold text-slate-400 flex gap-4">
+<span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-primary"></span>Done</span>
+<span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-foggy-blue"></span>Planned</span>
+</div>
+</div>
+<div class="space-y-6">
+<div class="space-y-2">
+<div class="flex justify-between text-xs font-bold text-slate-600">
+<span>Dev Alpha</span>
+<span>92%</span>
+</div>
+<div class="h-3 bg-foggy-blue rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 92%"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-xs font-bold text-slate-600">
+<span>Dev Bravo</span>
+<span>78%</span>
+</div>
+<div class="h-3 bg-foggy-blue rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 78%"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-xs font-bold text-slate-600">
+<span>Dev Charlie</span>
+<span>45%</span>
+</div>
+<div class="h-3 bg-foggy-blue rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 45%"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Sprint Health Donut Chart -->
+<div class="col-span-12 lg:col-span-5 bg-white rounded-3xl p-6 shadow-sm shadow-slate-200/50 flex flex-col items-center justify-center">
+<h3 class="text-sm font-semibold text-slate-500 uppercase tracking-wider self-start mb-6">Sprint Health</h3>
+<div class="relative w-48 h-48 mb-6">
+<svg class="w-full h-full transform -rotate-90">
+<circle class="text-foggy-blue" cx="96" cy="96" fill="transparent" r="80" stroke="currentColor" stroke-width="20"></circle>
+<circle class="text-primary" cx="96" cy="96" fill="transparent" r="80" stroke="currentColor" stroke-dasharray="502.4" stroke-dashoffset="50" stroke-width="20"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="text-3xl font-extrabold text-slate-900">92%</span>
+<span class="text-[10px] font-bold text-slate-400 uppercase">On Track</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-x-8 gap-y-2 w-full max-w-[240px]">
+<div class="flex items-center gap-2 text-xs font-semibold text-slate-600">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+                                Completed
+                            </div>
+<div class="flex items-center gap-2 text-xs font-semibold text-slate-600">
+<span class="w-2 h-2 rounded-full bg-foggy-blue"></span>
+                                Backlog
+                            </div>
+</div>
+</div>
+</div>
+<!-- Recent Activity List -->
+<section class="bg-foggy-blue rounded-3xl p-8">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-lg font-bold text-slate-900">Recent Activity</h3>
+<button class="text-primary text-sm font-bold hover:underline">View All Logs</button>
+</div>
+<div class="space-y-4">
+<div class="bg-white rounded-2xl p-4 flex items-center justify-between shadow-sm">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center">
+<span class="material-symbols-outlined">check_circle</span>
+</div>
+<div>
+<p class="text-sm font-semibold text-slate-900">Frontend Dashboard Polish</p>
+<p class="text-xs text-slate-500">Completed by Sarah Jenkins</p>
+</div>
+</div>
+<span class="text-xs font-medium text-slate-400">24 mins ago</span>
+</div>
+<div class="bg-white rounded-2xl p-4 flex items-center justify-between shadow-sm">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center">
+<span class="material-symbols-outlined">chat</span>
+</div>
+<div>
+<p class="text-sm font-semibold text-slate-900">API Documentation Review</p>
+<p class="text-xs text-slate-500">New comment from Mike Ross</p>
+</div>
+</div>
+<span class="text-xs font-medium text-slate-400">1 hour ago</span>
+</div>
+<div class="bg-white rounded-2xl p-4 flex items-center justify-between shadow-sm">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center">
+<span class="material-symbols-outlined">warning</span>
+</div>
+<div>
+<p class="text-sm font-semibold text-slate-900">Database Connection Error</p>
+<p class="text-xs text-slate-500">Flagged as critical by System</p>
+</div>
+</div>
+<span class="text-xs font-medium text-slate-400">3 hours ago</span>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Floating Side Panel: Upcoming Deadlines -->
+<aside class="w-80 bg-white border-l border-slate-100 p-8 hidden xl:flex flex-col shrink-0">
+<h3 class="text-lg font-bold text-slate-900 mb-6">Upcoming Deadlines</h3>
+<div class="space-y-6">
+<div class="relative pl-6">
+<div class="absolute left-0 top-1 bottom-1 w-1 bg-primary rounded-full"></div>
+<p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Today</p>
+<h4 class="text-sm font-bold text-slate-900">Mobile App Beta Release</h4>
+<p class="text-xs text-slate-500 mt-1">Due at 5:00 PM</p>
+</div>
+<div class="relative pl-6">
+<div class="absolute left-0 top-1 bottom-1 w-1 bg-slate-200 rounded-full"></div>
+<p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Tomorrow</p>
+<h4 class="text-sm font-bold text-slate-900">Cloud Infrastructure Audit</h4>
+<p class="text-xs text-slate-500 mt-1">Due at 10:00 AM</p>
+</div>
+<div class="relative pl-6">
+<div class="absolute left-0 top-1 bottom-1 w-1 bg-slate-200 rounded-full"></div>
+<p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Wed, Oct 25</p>
+<h4 class="text-sm font-bold text-slate-900">Client Presentation</h4>
+<p class="text-xs text-slate-500 mt-1">Due at 2:30 PM</p>
+</div>
+</div>
+<div class="mt-12 bg-primary/5 rounded-3xl p-6">
+<h4 class="text-sm font-bold text-slate-900 mb-4">Sprint Summary</h4>
+<div class="space-y-4">
+<div class="flex justify-between items-center">
+<span class="text-xs font-medium text-slate-600">Total Tasks</span>
+<span class="text-xs font-bold text-slate-900">128</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-xs font-medium text-slate-600">Remaining</span>
+<span class="text-xs font-bold text-slate-900">12</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-xs font-medium text-slate-600">Blocked</span>
+<span class="text-xs font-bold text-red-500">3</span>
+</div>
+</div>
+</div>
+<div class="mt-auto">
+<button class="w-full bg-slate-900 text-white py-4 rounded-2xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-xl">file_download</span>
+                    Download Report
+                </button>
+</div>
+</aside>
+</div>
+</body></html>
