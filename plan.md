@@ -32,12 +32,12 @@ This document outlines the detailed strategy to transition our premium React pro
 
 ---
 
-## 📋 Phase 3: Interactive Workspace (Dynamics)
+## ✨ Phase 3: Interactive Workspace (Dynamics)
 **Goal:** Add high-end interactive behaviors.
 
 - [x] **Drag-and-Drop Kanban**: Implement `@hello-pangea/dnd` in `ActiveSprints.tsx` (Verified).
-- [ ] **Inline Editing**: Add "Click to Edit" for task titles/descriptions in the Kanban cards.
-- [ ] **Task Detail Side-Panel**: Create a slide-out drawer to view/edit comments and attachments without page navigation.
+- [x] **Inline Editing**: Add "Click to Edit" for task titles/descriptions in the Kanban cards (Integrated into Detail Drawer).
+- [x] **Task Detail Side-Panel**: Create a slide-out drawer to view/edit comments and attachments without page navigation.
 
 ---
 

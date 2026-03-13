@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { formatRelativeTime } from '../utils/time';
 
 export const Dashboard: React.FC = () => {
-    const { tasks, activities, users, sprints, setCreateModalOpen } = useTaskStore();
+    const { tasks, activities, users, sprints, setCreateModalOpen, setSelectedTaskId } = useTaskStore();
     const navigate = useNavigate();
 
     const criticalTasks = tasks.filter(t => t.priority === 'critical' || t.priority === 'high').length;
@@ -143,7 +143,14 @@ export const Dashboard: React.FC = () => {
                         {activities.length > 0 ? activities.map((activity, i) => {
                             const user = users.find(u => u.id === activity.userId);
                             return (
-                                <div key={i} className="flex gap-5 group items-start">
+                                <div 
+                                    key={i} 
+                                    className="flex gap-5 group items-start cursor-pointer"
+                                    onClick={() => {
+                                        const task = tasks.find(t => t.title === activity.target || t.id === activity.target);
+                                        if (task) setSelectedTaskId(task.id);
+                                    }}
+                                >
                                     <img className="w-10 h-10 rounded-xl object-cover ring-4 ring-transparent" src={user?.avatar || 'https://i.pravatar.cc/100?u=sys'} alt="user" />
                                     <div className="flex-1 pt-0.5">
                                         <p className="text-xs font-bold text-slate-500 leading-snug">

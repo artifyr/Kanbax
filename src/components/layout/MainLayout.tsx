@@ -3,6 +3,7 @@ import { Sidebar } from './Sidebar';
 import { Navbar } from './Navbar';
 import { Outlet } from 'react-router-dom';
 import { CreateTaskModal } from './CreateTaskModal';
+import { TaskDetailDrawer } from './TaskDetailDrawer';
 import { useTaskStore } from '../../hooks/useTaskStore';
 
 export const MainLayout: React.FC = () => {
@@ -34,6 +35,7 @@ export const MainLayout: React.FC = () => {
                 isOpen={isCreateModalOpen}
                 onClose={() => setCreateModalOpen(false)}
             />
+            <TaskDetailDrawer />
         </div>
     );
 };

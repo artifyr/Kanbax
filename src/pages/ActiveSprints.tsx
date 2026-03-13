@@ -13,7 +13,7 @@ const COLUMNS: { id: TaskStatus; label: string; color: string }[] = [
 ];
 
 export const ActiveSprints: React.FC = () => {
-    const { tasks, users, moveTask, searchQuery, deleteTask } = useTaskStore();
+    const { tasks, users, moveTask, searchQuery, deleteTask, setSelectedTaskId } = useTaskStore();
 
     const filteredTasks = tasks.filter(task =>
         task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -87,7 +87,8 @@ export const ActiveSprints: React.FC = () => {
                                                                 ref={provided.innerRef}
                                                                 {...provided.draggableProps}
                                                                 {...provided.dragHandleProps}
-                                                                className={`bg-paper-white p-7 rounded-[2rem] shadow-soft border border-midnight/5 group hover:border-primary/20 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden active:scale-95 active:rotate-2 ${snapshot.isDragging ? 'rotate-3 scale-105 shadow-2xl z-50 ring-2 ring-primary/20' : ''}`}
+                                                                onClick={() => setSelectedTaskId(task.id)}
+                                                                className={`bg-paper-white p-7 rounded-[2rem] shadow-soft border border-midnight/5 group hover:border-primary/20 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden active:scale-95 active:rotate-2 cursor-pointer ${snapshot.isDragging ? 'rotate-3 scale-105 shadow-2xl z-50 ring-2 ring-primary/20' : ''}`}
                                                             >
                                                                 <div className="flex justify-between items-start mb-5">
                                                                     <span className="text-[9px] font-black text-slate-300 uppercase tracking-widest tabular-nums">{task.id}</span>

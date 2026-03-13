@@ -12,6 +12,7 @@ interface TaskState {
     isCreateModalOpen: boolean;
     theme: 'light' | 'dark';
     unreadNotifications: number;
+    selectedTaskId: string | null;
 
     // Actions
     addTask: (task: Omit<Task, 'id' | 'createdAt' | 'updatedAt' | 'comments'>) => void;
@@ -23,6 +24,7 @@ interface TaskState {
     updateCurrentUser: (updates: Partial<User>) => void;
     setTheme: (theme: 'light' | 'dark') => void;
     clearUnread: () => void;
+    setSelectedTaskId: (id: string | null) => void;
 
     addActivity: (activity: Omit<ActivityLog, 'id' | 'time'>) => void;
 
@@ -161,6 +163,7 @@ export const useTaskStore = create<TaskState>()(
             isCreateModalOpen: false,
             theme: 'light',
             unreadNotifications: 2,
+            selectedTaskId: null,
 
             addTask: (taskData) => set((state) => {
                 const newTask: Task = {
@@ -268,7 +271,8 @@ export const useTaskStore = create<TaskState>()(
                 users: state.users.map(u => u.id === state.currentUser?.id ? { ...u, ...updates } : u)
             })),
             setTheme: (theme) => set({ theme }),
-            clearUnread: () => set({ unreadNotifications: 0 })
+            clearUnread: () => set({ unreadNotifications: 0 }),
+            setSelectedTaskId: (selectedTaskId) => set({ selectedTaskId })
         }),
         {
             name: 'kanbax-storage'
