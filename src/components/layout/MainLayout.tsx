@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Sidebar } from './Sidebar';
 import { Navbar } from './Navbar';
 import { Outlet } from 'react-router-dom';
@@ -6,7 +6,14 @@ import { CreateTaskModal } from './CreateTaskModal';
 import { useTaskStore } from '../../hooks/useTaskStore';
 
 export const MainLayout: React.FC = () => {
-    const { isCreateModalOpen, setCreateModalOpen } = useTaskStore();
+    const { isCreateModalOpen, setCreateModalOpen, theme } = useTaskStore();
+    useEffect(() => {
+        if (theme === 'dark') {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    }, [theme]);
 
     return (
         <div className="flex h-screen bg-canvas-white overflow-hidden font-sans selection:bg-primary/10 selection:text-primary">

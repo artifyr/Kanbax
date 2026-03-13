@@ -2,17 +2,43 @@
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
+:root {
+  --primary: #0059ba;
+  --primary-container: #0071e9;
+  --electric: #0071e9;
+  --ink-navy: #263143;
+  --canvas-white: #f9f9ff;
+  --paper-white: #ffffff;
+  --foggy-blue: #f0f3ff;
+  --midnight: #111c2d;
+  --mustard: #fdc425;
+  --lime: #91db2a;
+}
+
+.dark {
+  --primary: #3b82f6;
+  --primary-container: #1d4ed8;
+  --electric: #60a5fa;
+  --ink-navy: #0f172a;
+  --canvas-white: #020617;
+  --paper-white: #0f172a;
+  --foggy-blue: #1e293b;
+  --midnight: #f8fafc;
+  --mustard: #fbbf24;
+  --lime: #4ade80;
+}
+
 @theme {
-  --color-primary: #0059ba;
-  --color-primary-container: #0071e9;
-  --color-electric: #0071e9;
-  --color-ink-navy: #263143;
-  --color-canvas-white: #f9f9ff;
-  --color-paper-white: #ffffff;
-  --color-foggy-blue: #f0f3ff;
-  --color-midnight: #111c2d;
-  --color-mustard: #fdc425;
-  --color-lime: #91db2a;
+  --color-primary: var(--primary);
+  --color-primary-container: var(--primary-container);
+  --color-electric: var(--electric);
+  --color-ink-navy: var(--ink-navy);
+  --color-canvas-white: var(--canvas-white);
+  --color-paper-white: var(--paper-white);
+  --color-foggy-blue: var(--foggy-blue);
+  --color-midnight: var(--midnight);
+  --color-mustard: var(--mustard);
+  --color-lime: var(--lime);
 
   --font-display: "Manrope", sans-serif;
   --font-sans: "Inter", sans-serif;

@@ -10,6 +10,8 @@ interface TaskState {
     users: User[];
     searchQuery: string;
     isCreateModalOpen: boolean;
+    theme: 'light' | 'dark';
+    unreadNotifications: number;
 
     // Actions
     addTask: (task: Omit<Task, 'id' | 'createdAt' | 'updatedAt' | 'comments' | 'attachments'>) => void;
@@ -19,6 +21,8 @@ interface TaskState {
     setSearchQuery: (query: string) => void;
     setCreateModalOpen: (open: boolean) => void;
     updateCurrentUser: (updates: Partial<User>) => void;
+    setTheme: (theme: 'light' | 'dark') => void;
+    clearUnread: () => void;
 
     addActivity: (activity: Omit<ActivityLog, 'id' | 'time'>) => void;
 
@@ -105,6 +109,8 @@ export const useTaskStore = create<TaskState>()(
             users: INITIAL_USERS,
             searchQuery: '',
             isCreateModalOpen: false,
+            theme: 'light',
+            unreadNotifications: 2,
 
             addTask: (taskData) => set((state) => {
                 const newTask: Task = {
@@ -127,7 +133,8 @@ export const useTaskStore = create<TaskState>()(
 
                 return {
                     tasks: [newTask, ...state.tasks],
-                    activities: [newActivity, ...state.activities]
+                    activities: [newActivity, ...state.activities],
+                    unreadNotifications: state.unreadNotifications + 1
                 };
             }),
 
@@ -150,7 +157,8 @@ export const useTaskStore = create<TaskState>()(
 
                 return {
                     tasks: state.tasks.filter(t => t.id !== id),
-                    activities: [newActivity, ...state.activities]
+                    activities: [newActivity, ...state.activities],
+                    unreadNotifications: state.unreadNotifications + 1
                 };
             }),
 
@@ -169,7 +177,8 @@ export const useTaskStore = create<TaskState>()(
 
                 return {
                     tasks: state.tasks.map(t => t.id === taskId ? { ...t, status, updatedAt: new Date().toISOString() } : t),
-                    activities: [newActivity, ...state.activities]
+                    activities: [newActivity, ...state.activities],
+                    unreadNotifications: state.unreadNotifications + 1
                 };
             }),
 
@@ -190,7 +199,9 @@ export const useTaskStore = create<TaskState>()(
             updateCurrentUser: (updates) => set((state) => ({
                 currentUser: state.currentUser ? { ...state.currentUser, ...updates } : null,
                 users: state.users.map(u => u.id === state.currentUser?.id ? { ...u, ...updates } : u)
-            }))
+            })),
+            setTheme: (theme) => set({ theme }),
+            clearUnread: () => set({ unreadNotifications: 0 })
         }),
         {
             name: 'sprinto-storage'
