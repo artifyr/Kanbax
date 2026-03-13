@@ -20,7 +20,7 @@ export const Sidebar: React.FC = () => {
                     <Rocket className="text-white w-6 h-6" />
                 </div>
                 <div>
-                    <h1 className="font-display font-black text-midnight text-xl tracking-tighter leading-none">Sprinto</h1>
+                    <h1 className="font-display font-black text-midnight text-xl tracking-tighter leading-none">Kanbax</h1>
                     <span className="text-[9px] font-extrabold text-midnight/30 uppercase tracking-[0.2em] mt-1 block">Enterprise</span>
                 </div>
             </div>

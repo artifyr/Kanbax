@@ -14,7 +14,7 @@ interface TaskState {
     unreadNotifications: number;
 
     // Actions
-    addTask: (task: Omit<Task, 'id' | 'createdAt' | 'updatedAt' | 'comments' | 'attachments'>) => void;
+    addTask: (task: Omit<Task, 'id' | 'createdAt' | 'updatedAt' | 'comments'>) => void;
     updateTask: (id: string, updates: Partial<Task>) => void;
     deleteTask: (id: string) => void;
     moveTask: (taskId: string, status: TaskStatus) => void;
@@ -34,7 +34,7 @@ const INITIAL_USERS: User[] = [
     {
         id: 'u1',
         name: 'Sarah Chen',
-        email: 'sarah@sprinto.io',
+        email: 'sarah@kanbax.io',
         avatar: 'https://i.pravatar.cc/100?u=sarah',
         role: 'owner',
         title: 'Lead Designer'
@@ -42,7 +42,7 @@ const INITIAL_USERS: User[] = [
     {
         id: 'u2',
         name: 'Mike Ross',
-        email: 'mike@sprinto.io',
+        email: 'mike@kanbax.io',
         avatar: 'https://i.pravatar.cc/100?u=mike',
         role: 'admin',
         title: 'Senior Developer'
@@ -169,7 +169,7 @@ export const useTaskStore = create<TaskState>()(
                     createdAt: new Date().toISOString(),
                     updatedAt: new Date().toISOString(),
                     comments: [],
-                    attachments: []
+                    attachments: taskData.attachments || []
                 };
 
                 const newActivity: ActivityLog = {
@@ -271,7 +271,7 @@ export const useTaskStore = create<TaskState>()(
             clearUnread: () => set({ unreadNotifications: 0 })
         }),
         {
-            name: 'sprinto-storage'
+            name: 'kanbax-storage'
         }
     )
 );

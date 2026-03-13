@@ -7,7 +7,7 @@ export const Profile: React.FC = () => {
     const [name, setName] = useState(currentUser?.name || '');
     const [email, setEmail] = useState(currentUser?.email || '');
     const [role, setRole] = useState(currentUser?.title || '');
-    const [company, setCompany] = useState('Sprinto Solutions'); // Mock company
+    const [company, setCompany] = useState('Kanbax Solutions'); // Mock company
 
     const handleSave = () => {
         updateCurrentUser({

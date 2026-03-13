@@ -18,6 +18,7 @@ export const CreateTaskModal: React.FC<Props> = ({ isOpen, onClose }) => {
     const [priority, setPriority] = useState<Priority>('medium');
     const [assigneeId, setAssigneeId] = useState<string>('');
     const [tags, setTags] = useState<string[]>(['Design']);
+    const [attachments, setAttachments] = useState<string[]>([]);
 
     // UI State for custom dropdowns
     const [showAssigneeDropdown, setShowAssigneeDropdown] = useState(false);
@@ -31,6 +32,7 @@ export const CreateTaskModal: React.FC<Props> = ({ isOpen, onClose }) => {
             setPriority('medium');
             setAssigneeId(users[0]?.id || '');
             setTags(['Design']);
+            setAttachments([]);
         }
     }, [isOpen, users]);
 
@@ -45,6 +47,7 @@ export const CreateTaskModal: React.FC<Props> = ({ isOpen, onClose }) => {
             reporterId: currentUser?.id || 'system',
             status: 'todo',
             tags,
+            attachments,
             storyPoints: 5, // Default for now
         });
 
@@ -234,9 +237,28 @@ export const CreateTaskModal: React.FC<Props> = ({ isOpen, onClose }) => {
                                 <label className="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
                                     <Upload className="w-3 h-3" /> Attachments
                                 </label>
-                                <div className="w-full py-10 flex flex-col items-center justify-center border-2 border-dashed border-midnight/10 rounded-[2rem] bg-canvas-white/50 hover:bg-white hover:border-primary/30 transition-all duration-300 shadow-inner group-hover:shadow-2xl">
-                                    <Upload className="w-6 h-6 text-slate-300 mb-2" />
-                                    <p className="text-[9px] font-extrabold text-slate-400 uppercase tracking-widest">Maximum file size: 24MB</p>
+                                <div className="grid grid-cols-2 gap-4">
+                                    {attachments.map((url, i) => (
+                                        <div key={i} className="relative aspect-video rounded-2xl overflow-hidden border border-midnight/10 group">
+                                            <img src={url} alt="upload" className="w-full h-full object-cover" />
+                                            <button 
+                                                onClick={() => setAttachments(attachments.filter((_, idx) => idx !== i))}
+                                                className="absolute top-2 right-2 w-6 h-6 bg-red-500 text-white rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                                            >
+                                                <X className="w-3 h-3" />
+                                            </button>
+                                        </div>
+                                    ))}
+                                    <div 
+                                        onClick={() => {
+                                            const mockImg = `https://picsum.photos/seed/${Math.random()}/400/300`;
+                                            setAttachments([...attachments, mockImg]);
+                                        }}
+                                        className="w-full py-10 flex flex-col items-center justify-center border-2 border-dashed border-midnight/10 rounded-[2rem] bg-canvas-white/50 hover:bg-white hover:border-primary/30 transition-all duration-300 shadow-inner cursor-pointer group hover:scale-[1.02] active:scale-95"
+                                    >
+                                        <Upload className="w-6 h-6 text-slate-300 mb-2 group-hover:text-primary transition-colors" />
+                                        <p className="text-[9px] font-extrabold text-slate-400 uppercase tracking-widest">Simulate Upload</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>

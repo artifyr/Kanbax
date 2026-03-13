@@ -1,4 +1,4 @@
-# Design System: Project Manager (Sprinto)
+# Design System: Project Manager (Kanbax)
 **Project ID:** 12306986072234057077
 
 ## 1. Visual Theme & Atmosphere

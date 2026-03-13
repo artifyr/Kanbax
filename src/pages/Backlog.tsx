@@ -4,12 +4,35 @@ import { useTaskStore } from '../hooks/useTaskStore';
 
 export const Backlog: React.FC = () => {
     const { tasks, users, searchQuery, setSearchQuery, setCreateModalOpen, deleteTask } = useTaskStore();
+    const [sortBy, setSortBy] = React.useState<'id' | 'title' | 'priority' | 'status'>('id');
+    const [sortOrder, setSortOrder] = React.useState<'asc' | 'desc'>('asc');
 
-    const filteredTasks = tasks.filter(task =>
-        task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        task.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        task.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
-    );
+    const priorityOrder = { 'critical': 0, 'high': 1, 'medium': 2, 'low': 3 };
+
+    const filteredTasks = tasks
+        .filter(task =>
+            task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            task.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            task.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
+        )
+        .sort((a, b) => {
+            let comparison = 0;
+            if (sortBy === 'priority') {
+                comparison = priorityOrder[a.priority] - priorityOrder[b.priority];
+            } else {
+                comparison = String(a[sortBy]).localeCompare(String(b[sortBy]));
+            }
+            return sortOrder === 'asc' ? comparison : -comparison;
+        });
+
+    const handleSort = (field: typeof sortBy) => {
+        if (sortBy === field) {
+            setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+        } else {
+            setSortBy(field);
+            setSortOrder('asc');
+        }
+    };
 
     const stats = [
         { label: 'Total Tasks', value: tasks.length },
@@ -68,10 +91,25 @@ export const Backlog: React.FC = () => {
                 <table className="w-full text-left border-collapse">
                     <thead>
                         <tr className="bg-canvas-white/50 border-b border-midnight/5">
-                            <th className="px-8 py-6 text-[9px] font-black text-slate-400 uppercase tracking-widest">Task ID</th>
-                            <th className="px-8 py-6 text-[9px] font-black text-slate-400 uppercase tracking-widest">Work Item</th>
+                            <th 
+                                onClick={() => handleSort('id')}
+                                className="px-8 py-6 text-[9px] font-black text-slate-400 uppercase tracking-widest cursor-pointer hover:text-midnight transition-colors"
+                            >
+                                Task ID {sortBy === 'id' && (sortOrder === 'asc' ? '↑' : '↓')}
+                            </th>
+                            <th 
+                                onClick={() => handleSort('title')}
+                                className="px-8 py-6 text-[9px] font-black text-slate-400 uppercase tracking-widest cursor-pointer hover:text-midnight transition-colors"
+                            >
+                                Work Item {sortBy === 'title' && (sortOrder === 'asc' ? '↑' : '↓')}
+                            </th>
                             <th className="px-8 py-6 text-[9px] font-black text-slate-400 uppercase tracking-widest">Assignee</th>
-                            <th className="px-8 py-6 text-[9px] font-black text-slate-400 uppercase tracking-widest">Status</th>
+                            <th 
+                                onClick={() => handleSort('status')}
+                                className="px-8 py-6 text-[9px] font-black text-slate-400 uppercase tracking-widest cursor-pointer hover:text-midnight transition-colors"
+                            >
+                                Status {sortBy === 'status' && (sortOrder === 'asc' ? '↑' : '↓')}
+                            </th>
                             <th className="px-8 py-6 text-right"><MoreVertical className="w-4 h-4 ml-auto" /></th>
                         </tr>
                     </thead>
