@@ -77,6 +77,48 @@ const INITIAL_TASKS: Task[] = [
         updatedAt: new Date().toISOString(),
         comments: [],
         attachments: []
+    },
+    {
+        id: 'T-103',
+        title: 'Fix Auth Middleware',
+        description: 'JWT validation failing on specific edge cases.',
+        status: 'done',
+        priority: 'critical',
+        assigneeId: 'u2',
+        reporterId: 'u1',
+        tags: ['Backend', 'Security'],
+        createdAt: new Date(Date.now() - 86400000).toISOString(),
+        updatedAt: new Date(Date.now() - 3600000).toISOString(),
+        comments: [],
+        attachments: []
+    },
+    {
+        id: 'T-104',
+        title: 'Implement Search Optimization',
+        description: 'Index database fields for faster queries.',
+        status: 'todo',
+        priority: 'low',
+        assigneeId: 'u2',
+        reporterId: 'u2',
+        tags: ['Backend', 'Perf'],
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        comments: [],
+        attachments: []
+    },
+    {
+        id: 'T-105',
+        title: 'Landing Page Revamp',
+        description: 'New marketing copy and hero section.',
+        status: 'done',
+        priority: 'medium',
+        assigneeId: 'u1',
+        reporterId: 'u1',
+        tags: ['Marketing', 'Frontend'],
+        createdAt: new Date(Date.now() - 172800000).toISOString(),
+        updatedAt: new Date(Date.now() - 86400000).toISOString(),
+        comments: [],
+        attachments: []
     }
 ];
 
@@ -101,8 +143,16 @@ export const useTaskStore = create<TaskState>()(
                     userId: 'u1',
                     action: 'completed',
                     target: 'UI Polish',
-                    time: '24 mins ago',
+                    time: new Date(Date.now() - 1000 * 60 * 24).toISOString(),
                     type: 'success'
+                },
+                {
+                    id: 'a2',
+                    userId: 'u2',
+                    action: 'shared',
+                    target: 'Design Guidelines',
+                    time: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),
+                    type: 'info'
                 }
             ],
             currentUser: INITIAL_USERS[0],
@@ -127,7 +177,7 @@ export const useTaskStore = create<TaskState>()(
                     userId: state.currentUser?.id || 'system',
                     action: 'created task',
                     target: newTask.title,
-                    time: 'Just now',
+                    time: new Date().toISOString(),
                     type: 'info'
                 };
 
@@ -138,9 +188,25 @@ export const useTaskStore = create<TaskState>()(
                 };
             }),
 
-            updateTask: (id, updates) => set((state) => ({
-                tasks: state.tasks.map(t => t.id === id ? { ...t, ...updates, updatedAt: new Date().toISOString() } : t)
-            })),
+            updateTask: (id, updates) => set((state) => {
+                const task = state.tasks.find(t => t.id === id);
+                if (!task) return state;
+
+                const newActivity: ActivityLog = {
+                    id: Math.random().toString(36).substr(2, 9),
+                    userId: state.currentUser?.id || 'system',
+                    action: 'updated task',
+                    target: task.title,
+                    time: new Date().toISOString(),
+                    type: 'info'
+                };
+
+                return {
+                    tasks: state.tasks.map(t => t.id === id ? { ...t, ...updates, updatedAt: new Date().toISOString() } : t),
+                    activities: [newActivity, ...state.activities],
+                    unreadNotifications: state.unreadNotifications + 1
+                };
+            }),
 
             deleteTask: (id) => set((state) => {
                 const deletedTask = state.tasks.find(t => t.id === id);
@@ -151,7 +217,7 @@ export const useTaskStore = create<TaskState>()(
                     userId: state.currentUser?.id || 'system',
                     action: 'deleted task',
                     target: deletedTask.title,
-                    time: 'Just now',
+                    time: new Date().toISOString(),
                     type: 'warning'
                 };
 
@@ -171,7 +237,7 @@ export const useTaskStore = create<TaskState>()(
                     userId: state.currentUser?.id || 'system',
                     action: 'moved task to',
                     target: status,
-                    time: 'Just now',
+                    time: new Date().toISOString(),
                     type: 'info'
                 };
 
@@ -187,10 +253,11 @@ export const useTaskStore = create<TaskState>()(
                     {
                         ...activityData,
                         id: Math.random().toString(36).substr(2, 9),
-                        time: 'Just now'
+                        time: new Date().toISOString()
                     },
                     ...state.activities
-                ]
+                ],
+                unreadNotifications: state.unreadNotifications + 1
             })),
 
             setCurrentUser: (user) => set({ currentUser: user }),

@@ -124,7 +124,7 @@ export const CreateTaskModal: React.FC<Props> = ({ isOpen, onClose }) => {
                                                 initial={{ opacity: 0, y: 10 }}
                                                 animate={{ opacity: 1, y: 0 }}
                                                 exit={{ opacity: 0, y: 10 }}
-                                                className="absolute top-full mt-2 left-0 w-full bg-white rounded-2xl shadow-2xl border border-midnight/5 z-[80] overflow-hidden"
+                                                className="absolute top-full mt-2 left-0 w-full bg-paper-white rounded-2xl shadow-2xl border border-midnight/5 z-[80] overflow-hidden"
                                             >
                                                 {users.map(user => (
                                                     <div
@@ -167,7 +167,7 @@ export const CreateTaskModal: React.FC<Props> = ({ isOpen, onClose }) => {
                                                 initial={{ opacity: 0, y: 10 }}
                                                 animate={{ opacity: 1, y: 0 }}
                                                 exit={{ opacity: 0, y: 10 }}
-                                                className="absolute top-full mt-2 left-0 w-full bg-white rounded-2xl shadow-2xl border border-midnight/5 z-[80] overflow-hidden"
+                                                className="absolute top-full mt-2 left-0 w-full bg-paper-white rounded-2xl shadow-2xl border border-midnight/5 z-[80] overflow-hidden"
                                             >
                                                 {priorities.map(p => (
                                                     <div
@@ -198,7 +198,7 @@ export const CreateTaskModal: React.FC<Props> = ({ isOpen, onClose }) => {
                                 </label>
                                 <div className="flex items-center gap-2 flex-wrap min-h-[56px] p-2 bg-foggy-blue/20 rounded-2xl border border-dashed border-midnight/10">
                                     {tags.map(tag => (
-                                        <span key={tag} className="bg-white px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest text-primary flex items-center gap-2 border border-primary/10 shadow-sm">
+                                        <span key={tag} className="bg-paper-white px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest text-primary flex items-center gap-2 border border-primary/10 shadow-sm">
                                             {tag} <X onClick={() => setTags(tags.filter(t => t !== tag))} className="w-2.5 h-2.5 cursor-pointer hover:text-red-500" />
                                         </span>
                                     ))}
@@ -207,7 +207,7 @@ export const CreateTaskModal: React.FC<Props> = ({ isOpen, onClose }) => {
                                             const newTag = prompt('New Tag?');
                                             if (newTag) setTags([...tags, newTag]);
                                         }}
-                                        className="w-10 h-10 rounded-xl bg-white border border-midnight/5 flex items-center justify-center text-slate-300 hover:text-primary transition-all shadow-sm active:scale-90"
+                                        className="w-10 h-10 rounded-xl bg-paper-white border border-midnight/5 flex items-center justify-center text-slate-300 hover:text-primary transition-all shadow-sm active:scale-90"
                                     >
                                         <Plus className="w-4 h-4" />
                                     </button>
@@ -219,7 +219,7 @@ export const CreateTaskModal: React.FC<Props> = ({ isOpen, onClose }) => {
                                 <label className="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
                                     <AlignLeft className="w-3 h-3" /> Requirements & Description
                                 </label>
-                                <div className="bg-foggy-blue/40 rounded-3xl overflow-hidden border border-midnight/[0.03] transition-all focus-within:bg-white focus-within:ring-8 focus-within:ring-primary/5 group focus-within:border-primary/20">
+                                <div className="bg-foggy-blue/40 rounded-3xl overflow-hidden border border-midnight/[0.03] transition-all focus-within:bg-paper-white focus-within:ring-8 focus-within:ring-primary/5 group focus-within:border-primary/20">
                                     <textarea
                                         value={description}
                                         onChange={(e) => setDescription(e.target.value)}
