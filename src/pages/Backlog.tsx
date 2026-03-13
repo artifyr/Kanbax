@@ -1,6 +1,7 @@
 import React from 'react';
-import { Filter, MoreVertical, ChevronRight, LayoutGrid, List, Search, Plus, Tag, Trash2 } from 'lucide-react';
+import { Filter, MoreVertical, ChevronRight, LayoutGrid, List, Search, Plus, Tag, Trash2, FileJson } from 'lucide-react';
 import { useTaskStore } from '../hooks/useTaskStore';
+import { exportToCSV } from '../utils/export';
 
 export const Backlog: React.FC = () => {
     const { tasks, users, searchQuery, setSearchQuery, setCreateModalOpen, deleteTask, setSelectedTaskId } = useTaskStore();
@@ -33,6 +34,10 @@ export const Backlog: React.FC = () => {
             setSortBy(field);
             setSortOrder('asc');
         }
+    };
+
+    const handleExport = () => {
+        exportToCSV(filteredTasks, `kanbax-backlog-${new Date().toISOString().split('T')[0]}.csv`);
     };
 
     const stats = [
@@ -77,9 +82,19 @@ export const Backlog: React.FC = () => {
                             type="text"
                         />
                     </div>
-                    <button className="flex items-center gap-2 px-6 py-3 bg-canvas-white rounded-xl border border-midnight/5 text-[10px] font-black uppercase tracking-widest text-midnight hover:bg-white transition-all shadow-sm">
-                        <Filter className="w-3.5 h-3.5" /> Filter
-                    </button>
+                    <div className="flex gap-2">
+                        <button className="flex items-center gap-2 px-6 py-3 bg-canvas-white rounded-xl border border-midnight/5 text-[10px] font-black uppercase tracking-widest text-midnight hover:bg-white transition-all shadow-sm">
+                            <Filter className="w-3.5 h-3.5" /> Filter
+                        </button>
+                        <button 
+                            onClick={handleExport}
+                            className="flex items-center gap-2 px-6 py-3 bg-canvas-white rounded-xl border border-midnight/5 text-[10px] font-black uppercase tracking-widest text-primary hover:bg-white transition-all shadow-sm"
+                            title="Export to CSV"
+                        >
+                            <FileJson className="w-3.5 h-3.5" /> 
+                            <span className="hidden sm:inline">Export</span>
+                        </button>
+                    </div>
                 </div>
                 <div className="flex items-center gap-2 bg-canvas-white p-1 rounded-xl shadow-inner border border-midnight/5">
                     <button 
