@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Upload, ChevronDown, Type, AlignLeft, Users, Flag, Tag, Plus } from 'lucide-react';
+import { X, Upload, ChevronDown, Type, AlignLeft, Users, Flag, Tag, Plus, Calendar as CalendarIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTaskStore } from '../../hooks/useTaskStore';
 import type { Priority } from '../../types';
@@ -19,6 +19,7 @@ export const CreateTaskModal: React.FC<Props> = ({ isOpen, onClose }) => {
     const [assigneeId, setAssigneeId] = useState<string>('');
     const [tags, setTags] = useState<string[]>(['Design']);
     const [attachments, setAttachments] = useState<string[]>([]);
+    const [dueDate, setDueDate] = useState<string>(new Date().toISOString().split('T')[0]);
 
     // UI State for custom dropdowns
     const [showAssigneeDropdown, setShowAssigneeDropdown] = useState(false);
@@ -33,6 +34,7 @@ export const CreateTaskModal: React.FC<Props> = ({ isOpen, onClose }) => {
             setAssigneeId(users[0]?.id || '');
             setTags(['Design']);
             setAttachments([]);
+            setDueDate(new Date().toISOString().split('T')[0]);
         }
     }, [isOpen, users]);
 
@@ -48,6 +50,7 @@ export const CreateTaskModal: React.FC<Props> = ({ isOpen, onClose }) => {
             status: 'todo',
             tags,
             attachments,
+            dueDate,
             storyPoints: 5, // Default for now
         });
 
@@ -192,9 +195,21 @@ export const CreateTaskModal: React.FC<Props> = ({ isOpen, onClose }) => {
                                         )}
                                     </AnimatePresence>
                                 </div>
+                                
+                                <div className="space-y-4">
+                                    <label className="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
+                                        <CalendarIcon className="w-3 h-3" /> Target Date
+                                    </label>
+                                    <input
+                                        type="date"
+                                        value={dueDate}
+                                        onChange={(e) => setDueDate(e.target.value)}
+                                        className="w-full bg-paper-white p-4 rounded-2xl border border-midnight/[0.03] hover:bg-canvas-white cursor-pointer transition-colors shadow-sm outline-none focus:ring-4 focus:ring-primary/5 text-xs font-bold text-midnight"
+                                    />
+                                </div>
                             </div>
 
-                            {/* Tags */}
+                                    {/* Tags */}
                             <div className="space-y-4">
                                 <label className="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
                                     <Tag className="w-3 h-3" /> Task Labels

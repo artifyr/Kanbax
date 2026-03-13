@@ -1,11 +1,64 @@
-import React from 'react';
-import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Info, ArrowRight, Plus } from 'lucide-react';
+import React, { useState } from 'react';
+import { 
+    ChevronLeft, 
+    ChevronRight, 
+    Calendar as CalendarIcon, 
+    Info, 
+    ArrowRight, 
+    Plus, 
+    Activity,
+    Clock,
+    User,
+    MoreHorizontal
+} from 'lucide-react';
+import { 
+    format, 
+    addMonths, 
+    subMonths, 
+    startOfMonth, 
+    endOfMonth, 
+    startOfWeek, 
+    endOfWeek, 
+    isSameMonth, 
+    isSameDay, 
+    addDays, 
+    eachDayOfInterval,
+    parseISO,
+    isToday
+} from 'date-fns';
+import { useTaskStore } from '../hooks/useTaskStore';
 
 export const Calendar: React.FC = () => {
-    const days = Array.from({ length: 35 }, (_, i) => i - 5); // Simple mock grid starting from last month
+    const { tasks, users, setSelectedTaskId } = useTaskStore();
+    const [currentMonth, setCurrentMonth] = useState(new Date());
+
+    const nextMonth = () => setCurrentMonth(addMonths(currentMonth, 1));
+    const prevMonth = () => setCurrentMonth(subMonths(currentMonth, 1));
+
+    const monthStart = startOfMonth(currentMonth);
+    const monthEnd = endOfMonth(monthStart);
+    const startDate = startOfWeek(monthStart);
+    const endDate = endOfWeek(monthEnd);
+
+    const calendarDays = eachDayOfInterval({
+        start: startDate,
+        end: endDate,
+    });
+
+    const getTasksForDay = (day: Date) => {
+        return tasks.filter(task => {
+            if (!task.dueDate) return false;
+            try {
+                return isSameDay(parseISO(task.dueDate), day);
+            } catch (e) {
+                return false;
+            }
+        });
+    };
 
     return (
         <div className="space-y-8 animate-soft-in">
+            {/* Calendar Header */}
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                 <div>
                     <div className="flex items-center gap-2 text-[10px] font-extrabold text-slate-400 mb-1 uppercase tracking-[0.2em]">
@@ -13,8 +66,12 @@ export const Calendar: React.FC = () => {
                         <ChevronRight className="w-3 h-3 text-slate-300" />
                         <span className="text-primary font-bold">Project Scheduler</span>
                     </div>
-                    <h2 className="text-4xl text-midnight tracking-tight">September 2024</h2>
-                    <p className="text-slate-500 font-medium mt-1 uppercase text-[10px] tracking-[0.2em]">48 tasks scheduled this month</p>
+                    <h2 className="text-4xl text-midnight tracking-tight italic">
+                        {format(currentMonth, 'MMMM yyyy')}
+                    </h2>
+                    <p className="text-slate-500 font-medium mt-1 uppercase text-[10px] tracking-[0.2em]">
+                        {tasks.filter(t => t.dueDate && isSameMonth(parseISO(t.dueDate), currentMonth)).length} tasks scheduled this month
+                    </p>
                 </div>
 
                 <div className="flex items-center gap-4">
@@ -24,11 +81,22 @@ export const Calendar: React.FC = () => {
                         <button className="px-5 py-2 rounded-lg text-xs font-extrabold uppercase tracking-widest text-slate-400 hover:text-midnight transition-all">Day</button>
                     </div>
                     <div className="flex items-center gap-2">
-                        <button className="p-2.5 bg-paper-white hover:bg-canvas-white rounded-xl text-slate-400 hover:text-midnight transition-colors border border-midnight/[0.03] shadow-sm">
+                        <button 
+                            onClick={prevMonth}
+                            className="p-2.5 bg-paper-white hover:bg-canvas-white rounded-xl text-slate-400 hover:text-midnight transition-colors border border-midnight/[0.03] shadow-sm"
+                        >
                             <ChevronLeft className="w-4 h-4" />
                         </button>
-                        <button className="px-6 py-2.5 bg-paper-white hover:bg-canvas-white rounded-xl text-[11px] font-black uppercase tracking-widest text-midnight border border-midnight/[0.03] shadow-sm active:scale-95 transition-all">Today</button>
-                        <button className="p-2.5 bg-paper-white hover:bg-canvas-white rounded-xl text-slate-400 hover:text-midnight transition-colors border border-midnight/[0.03] shadow-sm">
+                        <button 
+                            onClick={() => setCurrentMonth(new Date())}
+                            className="px-6 py-2.5 bg-paper-white hover:bg-canvas-white rounded-xl text-[11px] font-black uppercase tracking-widest text-midnight border border-midnight/[0.03] shadow-sm active:scale-95 transition-all text-center"
+                        >
+                            Today
+                        </button>
+                        <button 
+                            onClick={nextMonth}
+                            className="p-2.5 bg-paper-white hover:bg-canvas-white rounded-xl text-slate-400 hover:text-midnight transition-colors border border-midnight/[0.03] shadow-sm"
+                        >
                             <ChevronRight className="w-4 h-4" />
                         </button>
                     </div>
@@ -44,42 +112,40 @@ export const Calendar: React.FC = () => {
                 </div>
 
                 <div className="grid grid-cols-7 auto-rows-[minmax(140px,auto)] gap-[1px] bg-midnight/[0.03]">
-                    {days.map((day, i) => {
-                        const isCurrentMonth = day > 0 && day <= 30;
-                        const isToday = day === 19;
+                    {calendarDays.map((day, i) => {
+                        const dayTasks = getTasksForDay(day);
+                        const isCurrentM = isSameMonth(day, monthStart);
+                        const isTdy = isToday(day);
 
                         return (
                             <div key={i} className={`p-4 transition-colors relative group 
-                ${isCurrentMonth ? 'bg-paper-white hover:bg-canvas-white' : 'bg-canvas-white/40 opacity-40'} 
-                ${isToday ? 'ring-2 ring-primary ring-inset z-10' : ''}`}>
-                                <span className={`text-xs font-black tracking-tight ${isToday ? 'text-primary' : 'text-midnight/60'}`}>
-                                    {day <= 0 ? 31 + day : (day > 30 ? day - 30 : day)}
+                                ${isCurrentM ? 'bg-paper-white hover:bg-canvas-white' : 'bg-canvas-white/40 opacity-40'} 
+                                ${isTdy ? 'ring-2 ring-primary ring-inset z-10' : ''}`}>
+                                
+                                <span className={`text-xs font-black tracking-tight ${isTdy ? 'text-primary' : 'text-midnight/60'}`}>
+                                    {format(day, 'd')}
                                 </span>
 
                                 <div className="mt-4 space-y-2">
-                                    {day === 2 && (
-                                        <div className="bg-primary/10 border-l-4 border-primary px-3 py-2 rounded-r-xl text-[10px] font-black text-primary uppercase tracking-tighter truncate group-hover:scale-105 transition-transform">
-                                            Sprint Planning
-                                        </div>
-                                    )}
-                                    {day === 3 && (
-                                        <div className="bg-lime/10 border-l-4 border-lime px-3 py-2 rounded-r-xl text-[10px] font-black text-lime uppercase tracking-tighter truncate">
-                                            Design Review
-                                        </div>
-                                    )}
-                                    {day === 10 && (
-                                        <div className="absolute left-2 right-[-100%] top-12 h-8 bg-primary rounded-full z-10 flex items-center px-4 shadow-xl shadow-primary/20 group-hover:-translate-y-1 transition-transform">
-                                            <span className="text-white text-[10px] font-black uppercase tracking-[0.1em]">Product Launch Phase 1</span>
-                                        </div>
-                                    )}
-                                    {day === 19 && (
-                                        <div className="bg-primary border-l-4 border-white shadow-lg px-3 py-2 rounded-r-xl text-[10px] font-black text-white uppercase tracking-tighter truncate animate-pulse">
-                                            Deployment Day
-                                        </div>
-                                    )}
+                                    {dayTasks.map(task => (
+                                        <button
+                                            key={task.id}
+                                            onClick={() => setSelectedTaskId(task.id)}
+                                            className={`w-full text-left px-3 py-2 rounded-xl text-[9px] font-black uppercase tracking-tighter truncate border-l-4 transition-all hover:scale-[1.03] active:scale-95 shadow-sm
+                                                ${task.priority === 'critical' ? 'bg-red-500/10 border-red-500 text-red-500' :
+                                                  task.priority === 'high' ? 'bg-orange-500/10 border-orange-500 text-orange-500' :
+                                                  task.priority === 'medium' ? 'bg-mustard/10 border-mustard text-mustard' :
+                                                  'bg-lime/10 border-lime text-lime'
+                                                }`}
+                                        >
+                                            {task.title}
+                                        </button>
+                                    ))}
                                 </div>
 
-                                <button className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity p-1.5 bg-white rounded-lg shadow-sm border border-midnight/5">
+                                <button 
+                                    className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity p-1.5 bg-white rounded-lg shadow-sm border border-midnight/5"
+                                >
                                     <Plus className="w-3.5 h-3.5 text-slate-400 hover:text-primary" />
                                 </button>
                             </div>
@@ -95,8 +161,16 @@ export const Calendar: React.FC = () => {
                         <div className="w-12 h-12 bg-primary/10 text-primary rounded-2xl flex items-center justify-center mb-6 ring-8 ring-primary/5">
                             <CalendarIcon className="w-6 h-6" />
                         </div>
-                        <h3 className="text-xl font-black text-midnight tracking-tight">Upcoming Priority</h3>
-                        <p className="text-xs font-bold text-slate-400 mt-3 leading-relaxed">Next high-priority task starts in 2 days: <span className="text-primary font-black uppercase tracking-widest">API Integration</span>.</p>
+                        <h3 className="text-xl font-black text-midnight tracking-tight italic">Upcoming Priority</h3>
+                        {tasks.filter(t => t.priority === 'critical' && t.status !== 'done').length > 0 ? (
+                            <p className="text-xs font-bold text-slate-400 mt-3 leading-relaxed">
+                                Next critical task: <span className="text-primary font-black uppercase tracking-widest">
+                                    {tasks.find(t => t.priority === 'critical' && t.status !== 'done')?.title}
+                                </span>.
+                            </p>
+                        ) : (
+                            <p className="text-xs font-bold text-slate-400 mt-3 leading-relaxed">No upcoming critical tasks. Workspace is clear.</p>
+                        )}
                     </div>
                     <button className="mt-8 text-[11px] font-black text-primary flex items-center gap-2 uppercase tracking-widest hover:gap-4 transition-all">
                         View Details <ArrowRight className="w-4 h-4" />
@@ -108,29 +182,44 @@ export const Calendar: React.FC = () => {
                         <div className="w-12 h-12 bg-mustard/10 text-mustard rounded-2xl flex items-center justify-center mb-6 ring-8 ring-mustard/5">
                             <Info className="w-6 h-6" />
                         </div>
-                        <h3 className="text-xl font-black text-midnight tracking-tight">Resource Conflict</h3>
-                        <p className="text-xs font-bold text-slate-400 mt-3 leading-relaxed">Sarah Chen is double-booked on Sept 24th for <span className="text-mustard font-black uppercase tracking-widest">Asset Review</span> and <span className="text-mustard font-black uppercase tracking-widest">Sprint Sync</span>.</p>
+                        <h3 className="text-xl font-black text-midnight tracking-tight italic">Resource Insights</h3>
+                        <p className="text-xs font-bold text-slate-400 mt-3 leading-relaxed">
+                            Team is currently at <span className="text-mustard font-black uppercase tracking-widest">optimum capacity</span>. No overlapping conflicts detected in current sprint.
+                        </p>
                     </div>
                     <div className="flex -space-x-3 mt-8">
-                        {[1, 2, 3].map(i => (
-                            <img key={i} className="w-9 h-9 rounded-full border-4 border-paper-white shadow-sm ring-1 ring-midnight/5" src={`https://i.pravatar.cc/100?img=${i + 40}`} alt="avatar" />
+                        {users.slice(0, 4).map(u => (
+                            <img key={u.id} className="w-9 h-9 rounded-full border-4 border-paper-white shadow-sm ring-1 ring-midnight/5" src={u.avatar} alt="avatar" />
                         ))}
-                        <div className="w-9 h-9 rounded-full bg-canvas-white border-4 border-paper-white flex items-center justify-center text-[10px] font-black text-slate-400">+2</div>
+                        {users.length > 4 && (
+                            <div className="w-9 h-9 rounded-full bg-canvas-white border-4 border-paper-white flex items-center justify-center text-[10px] font-black text-slate-400">+{users.length - 4}</div>
+                        )}
                     </div>
                 </div>
 
-                <div className="bg-midnight p-8 rounded-[2rem] shadow-2xl shadow-midnight/30 flex flex-col justify-between text-white relative overflow-hidden group">
-                    <div className="relative z-10">
-                        <h3 className="text-xl font-black tracking-tight">Sprint 42 Health</h3>
-                        <div className="mt-10 flex items-end gap-3 text-white">
-                            <span className="text-5xl font-black tracking-tighter">84%</span>
-                            <span className="text-[10px] font-extrabold text-white/50 uppercase tracking-[0.2em] mb-2 leading-none">Completion Target</span>
+                <div className="bg-paper-white p-8 rounded-[2rem] shadow-soft border border-midnight/5 flex flex-col justify-between group hover:border-primary/20 transition-all">
+                    <div>
+                        <div className="w-12 h-12 bg-primary/10 text-primary rounded-2xl flex items-center justify-center mb-6 ring-8 ring-primary/5">
+                            <Activity className="w-6 h-6" />
                         </div>
-                        <div className="mt-6 w-full bg-white/10 h-2.5 rounded-full overflow-hidden p-0.5">
-                            <div className="bg-primary h-full rounded-full w-[84%] shadow-[0_0_15px_rgba(0,89,186,0.5)] transition-all duration-1000" />
+                        <h3 className="text-xl font-black text-midnight tracking-tight italic">Sprint 42 Health</h3>
+                        <div className="mt-10 flex items-end gap-3 text-midnight">
+                            <span className="text-5xl font-black tracking-tighter italic tabular-nums">
+                                {Math.round((tasks.filter(t => t.status === 'done').length / (tasks.length || 1)) * 100)}%
+                            </span>
+                            <span className="text-[10px] font-extrabold text-slate-400 uppercase tracking-[0.2em] mb-2 leading-none">Completion Target</span>
+                        </div>
+                        <div className="mt-6 w-full bg-midnight/[0.03] h-2.5 rounded-full overflow-hidden p-0.5">
+                            <div 
+                                className="bg-primary h-full rounded-full shadow-[0_0_15px_rgba(0,89,186,0.1)] transition-all duration-1000" 
+                                style={{ width: `${(tasks.filter(t => t.status === 'done').length / (tasks.length || 1)) * 100}%` }}
+                            />
                         </div>
                     </div>
-                    <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-primary/20 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-1000" />
+                    <div className="mt-8 flex items-center gap-2">
+                         <div className="w-2 h-2 bg-lime rounded-full animate-pulse" />
+                         <span className="text-[10px] font-black text-lime uppercase tracking-widest">On Track</span>
+                    </div>
                 </div>
             </div>
         </div>

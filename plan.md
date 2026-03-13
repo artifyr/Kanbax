@@ -38,6 +38,9 @@ This document outlines the detailed strategy to transition our premium React pro
 - [x] **Drag-and-Drop Kanban**: Implement `@hello-pangea/dnd` in `ActiveSprints.tsx` (Verified).
 - [x] **Inline Editing**: Add "Click to Edit" for task titles/descriptions in the Kanban cards (Integrated into Detail Drawer).
 - [x] **Task Detail Side-Panel**: Create a slide-out drawer to view/edit comments and attachments without page navigation.
+- [x] **Calendar Integration**: Implemented full calendar logic with `date-fns`.
+- [x] **Task Scheduling**: Tasks with `dueDate` now populate automatically in the calendar.
+- [x] **Task List Transformation**: Rebranded Backlog to a multi-view Task List.
 
 ---
 
@@ -66,5 +69,4 @@ This document outlines the detailed strategy to transition our premium React pro
 
 ---
 
-> [!TIP]
-> **Next Focus:** implementing **Inline Editing** and the **Task Detail Panel** to round out the workspace experience.
+> **Next Focus:** implementing **Phase 4: Analytics & Intelligence** (Recharts integration).

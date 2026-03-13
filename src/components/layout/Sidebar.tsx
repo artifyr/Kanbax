@@ -4,7 +4,7 @@ import { Rocket } from 'lucide-react';
 
 const NAV_LINKS = [
     { label: "Dashboard", href: "/", icon: "dashboard" },
-    { label: "Backlog", href: "/backlog", icon: "folder" },
+    { label: "Task List", href: "/backlog", icon: "folder" },
     { label: "Active Sprints", href: "/active-sprints", icon: "rocket_launch" },
     { label: "Calendar", href: "/calendar", icon: "calendar_today" },
     { label: "Team", href: "/team", icon: "group" },
@@ -54,7 +54,7 @@ export const Sidebar: React.FC = () => {
                     <div className="flex items-center gap-4">
                         <div className="relative w-12 h-12 flex items-center justify-center">
                             <svg className="w-full h-full transform -rotate-90">
-                                <circle cx="24" cy="24" r="22" fill="none" stroke="rgba(0,0,0,0.05)" strokeWidth="4" />
+                                <circle cx="24" cy="24" r="22" fill="none" stroke="currentColor" className="text-midnight/5" strokeWidth="4" />
                                 <circle cx="24" cy="24" r="22" fill="none" stroke="currentColor" className="text-primary" strokeWidth="4" strokeDasharray="138" strokeDashoffset="30" strokeLinecap="round" />
                             </svg>
                             <span className="absolute text-[10px] font-black text-midnight">82%</span>

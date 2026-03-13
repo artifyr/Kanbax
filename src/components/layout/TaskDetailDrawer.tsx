@@ -122,7 +122,7 @@ export const TaskDetailDrawer: React.FC = () => {
                             </div>
 
                             {/* Meta Grid */}
-                            <div className="grid grid-cols-2 gap-8 py-8 border-y border-midnight/5">
+                            <div className="grid grid-cols-3 gap-8 py-8 border-y border-midnight/5">
                                 <div className="space-y-3">
                                     <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
                                         <User className="w-3 h-3" /> Assignee
@@ -137,11 +137,22 @@ export const TaskDetailDrawer: React.FC = () => {
                                 </div>
                                 <div className="space-y-3">
                                     <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                                        <Clock className="w-3 h-3" /> Target Date
+                                    </label>
+                                    <input
+                                        type="date"
+                                        value={task.dueDate || ''}
+                                        onChange={(e) => handleUpdate({ dueDate: e.target.value })}
+                                        className="w-full bg-white border border-midnight/5 rounded-xl px-3 py-2 text-[10px] font-black text-midnight uppercase tracking-widest outline-none focus:ring-2 focus:ring-primary/10 transition-all cursor-pointer"
+                                    />
+                                </div>
+                                <div className="space-y-3">
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
                                         <Clock className="w-3 h-3" /> Timestamps
                                     </label>
                                     <div className="space-y-1">
-                                        <p className="text-[10px] font-black text-midnight italic">Created {formatRelativeTime(task.createdAt)}</p>
-                                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Modified {formatRelativeTime(task.updatedAt)}</p>
+                                        <p className="text-[10px] font-black text-midnight italic tabular-nums">Created {formatRelativeTime(task.createdAt)}</p>
+                                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest tabular-nums leading-none">Modified {formatRelativeTime(task.updatedAt)}</p>
                                     </div>
                                 </div>
                             </div>

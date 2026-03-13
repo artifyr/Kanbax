@@ -3,9 +3,10 @@ import { Filter, MoreVertical, ChevronRight, LayoutGrid, List, Search, Plus, Tag
 import { useTaskStore } from '../hooks/useTaskStore';
 
 export const Backlog: React.FC = () => {
-    const { tasks, users, searchQuery, setSearchQuery, setCreateModalOpen, deleteTask } = useTaskStore();
+    const { tasks, users, searchQuery, setSearchQuery, setCreateModalOpen, deleteTask, setSelectedTaskId } = useTaskStore();
     const [sortBy, setSortBy] = React.useState<'id' | 'title' | 'priority' | 'status'>('id');
     const [sortOrder, setSortOrder] = React.useState<'asc' | 'desc'>('asc');
+    const [viewMode, setViewMode] = React.useState<'list' | 'grid'>('list');
 
     const priorityOrder = { 'critical': 0, 'high': 1, 'medium': 2, 'low': 3 };
 
@@ -50,7 +51,7 @@ export const Backlog: React.FC = () => {
                         <ChevronRight className="w-3 h-3 text-slate-300" />
                         <span className="text-primary font-bold">Product Backlog</span>
                     </div>
-                    <h2 className="text-4xl text-midnight tracking-tight italic">Resource Library</h2>
+                    <h2 className="text-4xl text-midnight tracking-tight italic">Task Inventory</h2>
                 </div>
 
                 <div className="flex gap-6">
@@ -81,99 +82,138 @@ export const Backlog: React.FC = () => {
                     </button>
                 </div>
                 <div className="flex items-center gap-2 bg-canvas-white p-1 rounded-xl shadow-inner border border-midnight/5">
-                    <button className="p-2.5 bg-white rounded-lg text-primary shadow-sm"><List className="w-4 h-4" /></button>
-                    <button className="p-2.5 text-slate-300 hover:text-midnight transition-colors"><LayoutGrid className="w-4 h-4" /></button>
+                    <button 
+                        onClick={() => setViewMode('list')}
+                        className={`p-2.5 rounded-lg transition-all ${viewMode === 'list' ? 'bg-white text-primary shadow-sm' : 'text-slate-300 hover:text-midnight'}`}
+                    >
+                        <List className="w-4 h-4" />
+                    </button>
+                    <button 
+                        onClick={() => setViewMode('grid')}
+                        className={`p-2.5 rounded-lg transition-all ${viewMode === 'grid' ? 'bg-white text-primary shadow-sm' : 'text-slate-300 hover:text-midnight'}`}
+                    >
+                        <LayoutGrid className="w-4 h-4" />
+                    </button>
                 </div>
             </div>
 
-            {/* Task Table */}
-            <div className="bg-paper-white rounded-[2rem] border border-midnight/5 shadow-soft overflow-hidden">
-                <table className="w-full text-left border-collapse">
-                    <thead>
-                        <tr className="bg-canvas-white/50 border-b border-midnight/5">
-                            <th 
-                                onClick={() => handleSort('id')}
-                                className="px-8 py-6 text-[9px] font-black text-slate-400 uppercase tracking-widest cursor-pointer hover:text-midnight transition-colors"
-                            >
-                                Task ID {sortBy === 'id' && (sortOrder === 'asc' ? '↑' : '↓')}
-                            </th>
-                            <th 
-                                onClick={() => handleSort('title')}
-                                className="px-8 py-6 text-[9px] font-black text-slate-400 uppercase tracking-widest cursor-pointer hover:text-midnight transition-colors"
-                            >
-                                Work Item {sortBy === 'title' && (sortOrder === 'asc' ? '↑' : '↓')}
-                            </th>
-                            <th className="px-8 py-6 text-[9px] font-black text-slate-400 uppercase tracking-widest">Assignee</th>
-                            <th 
-                                onClick={() => handleSort('status')}
-                                className="px-8 py-6 text-[9px] font-black text-slate-400 uppercase tracking-widest cursor-pointer hover:text-midnight transition-colors"
-                            >
-                                Status {sortBy === 'status' && (sortOrder === 'asc' ? '↑' : '↓')}
-                            </th>
-                            <th className="px-8 py-6 text-right"><MoreVertical className="w-4 h-4 ml-auto" /></th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-midnight/[0.03]">
-                        {filteredTasks.length > 0 ? filteredTasks.map((task) => {
-                            const assignee = users.find(u => u.id === task.assigneeId);
-                            return (
-                                <tr key={task.id} className="hover:bg-canvas-white transition-colors group cursor-pointer">
-                                    <td className="px-8 py-6">
-                                        <span className="text-[10px] font-black tabular-nums text-slate-400 tracking-widest uppercase">{task.id}</span>
-                                    </td>
-                                    <td className="px-8 py-6">
-                                        <div className="flex flex-col">
-                                            <span className="text-sm font-black text-midnight italic tracking-tight group-hover:text-primary transition-colors">{task.title}</span>
-                                            <div className="flex items-center gap-2 mt-1.5">
-                                                {task.tags.map(tag => (
-                                                    <span key={tag} className="text-[8px] font-black text-slate-300 uppercase tracking-widest flex items-center gap-1">
-                                                        <Tag className="w-2 h-2" /> {tag}
-                                                    </span>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td className="px-8 py-6">
-                                        <div className="flex items-center gap-3">
-                                            <img className="w-8 h-8 rounded-lg object-cover" src={assignee?.avatar || 'https://i.pravatar.cc/100?u=un'} alt="avatar" />
-                                            <span className="text-[10px] font-black text-midnight/60">{assignee?.name || 'Unassigned'}</span>
-                                        </div>
-                                    </td>
-                                    <td className="px-8 py-6">
-                                        <div className="flex items-center gap-3">
-                                            <div className={`w-2 h-2 rounded-full ${task.status === 'done' ? 'bg-lime' :
-                                                    task.status === 'in-progress' ? 'bg-primary' : 'bg-slate-300'
-                                                }`} />
-                                            <span className="text-[10px] font-black uppercase tracking-widest text-midnight/40">{task.status}</span>
-                                        </div>
-                                    </td>
-                                    <td className="px-8 py-6 text-right">
-                                        <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                            <button
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    if (confirm('Delete this task?')) deleteTask(task.id);
-                                                }}
-                                                className="p-2.5 text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all shadow-sm"
-                                            >
-                                                <Trash2 className="w-4 h-4" />
-                                            </button>
-                                            <button className="p-2.5 text-slate-300 hover:text-midnight hover:bg-white rounded-xl transition-all shadow-sm">
-                                                <ChevronRight className="w-4 h-4" />
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            );
-                        }) : (
-                            <tr>
-                                <td colSpan={5} className="px-8 py-20 text-center">
-                                    <p className="text-slate-400 font-bold italic">No items found matching your search.</p>
-                                </td>
+            {viewMode === 'list' ? (
+                <div className="bg-paper-white rounded-[2rem] border border-midnight/5 shadow-soft overflow-hidden">
+                    <table className="w-full text-left border-collapse">
+                        <thead>
+                            <tr className="bg-canvas-white/50 border-b border-midnight/5">
+                                <th 
+                                    onClick={() => handleSort('id')}
+                                    className="px-8 py-6 text-[9px] font-black text-slate-400 uppercase tracking-widest cursor-pointer hover:text-midnight transition-colors"
+                                >
+                                    Task ID {sortBy === 'id' && (sortOrder === 'asc' ? '↑' : '↓')}
+                                </th>
+                                <th 
+                                    onClick={() => handleSort('title')}
+                                    className="px-8 py-6 text-[9px] font-black text-slate-400 uppercase tracking-widest cursor-pointer hover:text-midnight transition-colors"
+                                >
+                                    Work Item {sortBy === 'title' && (sortOrder === 'asc' ? '↑' : '↓')}
+                                </th>
+                                <th className="px-8 py-6 text-[9px] font-black text-slate-400 uppercase tracking-widest">Assignee</th>
+                                <th 
+                                    onClick={() => handleSort('status')}
+                                    className="px-8 py-6 text-[9px] font-black text-slate-400 uppercase tracking-widest cursor-pointer hover:text-midnight transition-colors"
+                                >
+                                    Status {sortBy === 'status' && (sortOrder === 'asc' ? '↑' : '↓')}
+                                </th>
+                                <th className="px-8 py-6 text-right"><MoreVertical className="w-4 h-4 ml-auto" /></th>
                             </tr>
-                        )}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody className="divide-y divide-midnight/[0.03]">
+                            {filteredTasks.length > 0 ? filteredTasks.map((task) => {
+                                const assignee = users.find(u => u.id === task.assigneeId);
+                                return (
+                                    <tr 
+                                        key={task.id} 
+                                        className="hover:bg-canvas-white transition-colors group cursor-pointer"
+                                        onClick={() => setSelectedTaskId(task.id)}
+                                    >
+                                        <td className="px-8 py-6">
+                                            <span className="text-[10px] font-black tabular-nums text-slate-400 tracking-widest uppercase">{task.id}</span>
+                                        </td>
+                                        <td className="px-8 py-6">
+                                            <div className="flex flex-col">
+                                                <span className="text-sm font-black text-midnight italic tracking-tight group-hover:text-primary transition-colors">{task.title}</span>
+                                                <div className="flex items-center gap-2 mt-1.5">
+                                                    {task.tags.map(tag => (
+                                                        <span key={tag} className="text-[8px] font-black text-slate-300 uppercase tracking-widest flex items-center gap-1">
+                                                            <Tag className="w-2 h-2" /> {tag}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td className="px-8 py-6">
+                                            <div className="flex items-center gap-3">
+                                                <img className="w-8 h-8 rounded-lg object-cover" src={assignee?.avatar || 'https://i.pravatar.cc/100?u=un'} alt="avatar" />
+                                                <span className="text-[10px] font-black text-midnight/60">{assignee?.name || 'Unassigned'}</span>
+                                            </div>
+                                        </td>
+                                        <td className="px-8 py-6">
+                                            <div className="flex items-center gap-3">
+                                                <div className={`w-2 h-2 rounded-full ${task.status === 'done' ? 'bg-lime' :
+                                                        task.status === 'in-progress' ? 'bg-primary' : 'bg-slate-300'
+                                                    }`} />
+                                                <span className="text-[10px] font-black uppercase tracking-widest text-midnight/40">{task.status}</span>
+                                            </div>
+                                        </td>
+                                        <td className="px-8 py-6 text-right">
+                                            <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        if (confirm('Delete this task?')) deleteTask(task.id);
+                                                    }}
+                                                    className="p-2.5 text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all shadow-sm"
+                                                >
+                                                    <Trash2 className="w-4 h-4" />
+                                                </button>
+                                                <ChevronRight className="w-4 h-4 text-slate-300" />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                );
+                            }) : (
+                                <tr>
+                                    <td colSpan={5} className="px-8 py-20 text-center text-slate-400 font-bold italic">No items found</td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+            ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {filteredTasks.map(task => (
+                        <div 
+                            key={task.id} 
+                            onClick={() => setSelectedTaskId(task.id)}
+                            className="bg-paper-white p-6 rounded-[2rem] border border-midnight/5 shadow-soft hover:shadow-2xl hover:border-primary/20 transition-all cursor-pointer group"
+                        >
+                            <div className="flex justify-between items-start mb-4">
+                                <span className="text-[9px] font-black text-slate-300 uppercase tracking-widest">{task.id}</span>
+                                <div className={`px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-widest ${
+                                    task.priority === 'critical' ? 'bg-red-500 text-white' : 'bg-canvas-white text-slate-500'
+                                }`}>{task.priority}</div>
+                            </div>
+                            <h4 className="text-base font-black text-midnight italic tracking-tight mb-4 group-hover:text-primary transition-colors">{task.title}</h4>
+                            <div className="flex items-center justify-between mt-auto">
+                                <div className="flex items-center gap-2">
+                                    <img className="w-6 h-6 rounded-lg" src={users.find(u => u.id === task.assigneeId)?.avatar} alt="" />
+                                    <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">
+                                        {users.find(u => u.id === task.assigneeId)?.name || 'Unassigned'}
+                                    </span>
+                                </div>
+                                <span className="text-[9px] font-black text-primary uppercase tracking-widest">{task.status}</span>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
 
                 {/* Pagination/Footer */}
                 <div className="px-8 py-6 bg-canvas-white/30 border-t border-midnight/5 flex items-center justify-between">
@@ -185,6 +225,5 @@ export const Backlog: React.FC = () => {
                     </button>
                 </div>
             </div>
-        </div>
     );
 };
