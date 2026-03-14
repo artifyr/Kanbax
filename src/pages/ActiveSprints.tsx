@@ -13,12 +13,15 @@ const COLUMNS: { id: TaskStatus; label: string; color: string }[] = [
 ];
 
 export const ActiveSprints: React.FC = () => {
-    const { tasks, users, moveTask, searchQuery, deleteTask, setSelectedTaskId } = useTaskStore();
+    const { tasks, users, moveTask, searchQuery, deleteTask, setSelectedTaskId, sprints, completeSprint } = useTaskStore();
+    const activeSprint = sprints.find(s => s.status === 'active');
 
     const filteredTasks = tasks.filter(task =>
-        task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        task.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        task.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
+        task.status !== 'archived' && (
+            task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            task.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            task.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
+        )
     );
 
     const onDragEnd = (result: DropResult) => {
@@ -26,6 +29,12 @@ export const ActiveSprints: React.FC = () => {
         if (!destination) return;
         if (destination.droppableId === source.droppableId && destination.index === source.index) return;
         moveTask(draggableId, destination.droppableId as TaskStatus);
+    };
+
+    const handleEndSprint = () => {
+        if (confirm(`Are you sure you want to end ${activeSprint?.name}? All tasks in this sprint will be archived.`)) {
+            completeSprint();
+        }
     };
 
     return (
@@ -38,17 +47,23 @@ export const ActiveSprints: React.FC = () => {
                         <span className="text-primary font-bold">Active Sprint</span>
                     </div>
                     <div className="flex items-center gap-4">
-                        <h2 className="text-4xl text-midnight tracking-tight italic">Sprint 42</h2>
+                        <h2 className="text-4xl text-midnight tracking-tight italic">{activeSprint?.name || 'No Active Sprint'}</h2>
                         <div className="px-5 py-1.5 rounded-full bg-lime/10 text-lime text-[9px] font-black uppercase tracking-widest border border-lime/20 flex items-center gap-2">
                             <span className="w-1.5 h-1.5 bg-lime rounded-full animate-pulse" /> Active
                         </div>
                     </div>
                 </div>
                 <div className="flex items-center gap-6">
+                    <button 
+                        onClick={handleEndSprint}
+                        className="bg-midnight text-canvas-white px-8 py-4 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] shadow-2xl hover:-translate-y-1 transition-all active:scale-95"
+                    >
+                        End Sprint
+                    </button>
                     <div className="flex flex-col items-end">
                         <span className="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest mb-1 leading-none">Estimate Release</span>
                         <div className="flex items-center gap-2 text-midnight font-black text-sm">
-                            <Calendar className="w-3.5 h-3.5 text-primary" /> Sep 14, 2024
+                            <Calendar className="w-3.5 h-3.5 text-primary" /> {activeSprint?.endDate || 'Sep 14, 2024'}
                         </div>
                     </div>
                 </div>
@@ -105,7 +120,7 @@ export const ActiveSprints: React.FC = () => {
                                                                         <div className={`px-3 py-1 rounded-lg text-[8px] font-black uppercase tracking-widest border border-midnight/[0.03] shadow-inner 
                                                                             ${task.priority === 'critical' ? 'bg-red-500/10 text-red-500 border-red-500/20' :
                                                                                 task.priority === 'high' ? 'bg-mustard/10 text-mustard border-mustard/20' :
-                                                                                    'bg-slate-50 text-slate-400'}`}>
+                                                                                    'bg-foggy-blue/40 text-slate-400 border-midnight/5'}`}>
                                                                             {task.priority}
                                                                         </div>
                                                                     </div>

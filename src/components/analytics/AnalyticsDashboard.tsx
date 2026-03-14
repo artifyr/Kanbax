@@ -1,11 +1,11 @@
 import React, { useMemo } from 'react';
 import { 
     AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-    PieChart, Pie, Cell, Legend,
-    BarChart, Bar, LineChart, Line
+    PieChart, Pie, Cell,
+    BarChart, Bar
 } from 'recharts';
 import { useTaskStore } from '../../hooks/useTaskStore';
-import { format, subDays, startOfDay, eachDayOfInterval, isSameDay, parseISO } from 'date-fns';
+import { format, subDays, eachDayOfInterval, isSameDay, parseISO } from 'date-fns';
 import { TrendingUp, Target, Activity, Users } from 'lucide-react';
 
 export const AnalyticsDashboard: React.FC = () => {
@@ -64,17 +64,18 @@ export const AnalyticsDashboard: React.FC = () => {
     }, [tasks, users]);
 
     const totalCompleted = tasks.filter(t => t.status === 'done').length;
-    const completionRate = tasks.length > 0 ? Math.round((totalCompleted / tasks.length) * 100) : 0;
+    const activeTasksCount = tasks.filter(t => t.status !== 'archived').length;
+    const completionRate = activeTasksCount > 0 ? Math.round((totalCompleted / activeTasksCount) * 100) : 0;
 
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 animate-soft-in">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 animate-soft-in select-none">
             {/* KPI Row */}
             <div className="lg:col-span-12 grid grid-cols-1 md:grid-cols-4 gap-6">
                 {[
                     { label: 'Completion Rate', value: `${completionRate}%`, icon: Target, color: 'text-primary' },
-                    { label: 'Total Tasks', value: tasks.length, icon: Activity, color: 'text-midnight' },
+                    { label: 'Active Pipeline', value: activeTasksCount, icon: Activity, color: 'text-midnight' },
                     { label: 'Team Members', value: users.length, icon: Users, color: 'text-slate-400' },
-                    { label: 'Avg Velocity', value: (velocityData.reduce((a, b) => a + b.completed, 0) / 7).toFixed(1), icon: TrendingUp, color: 'text-lime' }
+                    { label: 'Avg Velocity', value: (velocityData.reduce((a: number, b: any) => a + b.completed, 0) / 7).toFixed(1), icon: TrendingUp, color: 'text-lime' }
                 ].map((kpi, i) => (
                     <div key={i} className="bg-paper-white p-6 rounded-3xl border border-midnight/5 shadow-soft flex items-center gap-5">
                         <div className={`w-12 h-12 rounded-2xl bg-canvas-white flex items-center justify-center ${kpi.color}`}>
@@ -162,8 +163,8 @@ export const AnalyticsDashboard: React.FC = () => {
                                 paddingAngle={5}
                                 dataKey="value"
                             >
-                                {priorityData.map((entry, index) => (
-                                    <Cell key={`cell-${index}`} fill={entry.color} />
+                                {priorityData.map((entry: any, index: number) => (
+                                    <Cell key={`cell-${index}`} fill={entry.color} className="outline-none focus:outline-none" />
                                 ))}
                             </Pie>
                             <Tooltip 

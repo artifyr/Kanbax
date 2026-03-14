@@ -28,6 +28,7 @@ interface TaskState {
     setSelectedTaskId: (id: string | null) => void;
 
     addActivity: (activity: Omit<ActivityLog, 'id' | 'time'>) => void;
+    completeSprint: () => void;
 
     setCurrentUser: (user: User) => void;
     removeUser: (userId: string) => void;
@@ -134,10 +135,10 @@ export const useTaskStore = create<TaskState>()(
             sprints: [
                 {
                     id: 's1',
-                    name: 'Sprint 42',
-                    goal: 'Infrastructure Polish & API v2',
-                    startDate: '2024-09-01',
-                    endDate: '2024-09-14',
+                    name: 'Sprint 1',
+                    goal: 'Platform Foundation',
+                    startDate: new Date().toISOString().split('T')[0],
+                    endDate: new Date(Date.now() + 14 * 86400000).toISOString().split('T')[0],
                     status: 'active',
                     taskIds: ['T-101', 'T-102']
                 }
@@ -278,6 +279,42 @@ export const useTaskStore = create<TaskState>()(
             clearUnread: () => set({ unreadNotifications: 0 }),
             setSelectedTaskId: (selectedTaskId) => set({ selectedTaskId }),
             setInitialDueDate: (initialDueDate) => set({ initialDueDate }),
+            completeSprint: () => set((state) => {
+                const activeSprint = state.sprints.find(s => s.status === 'active');
+                if (!activeSprint) return state;
+
+                // Archive tasks from current sprint
+                const updatedTasks = state.tasks.map(task => 
+                    activeSprint.taskIds.includes(task.id) ? { ...task, status: 'archived' as TaskStatus } : task
+                );
+
+                const sprintNum = parseInt(activeSprint.name.replace('Sprint ', '')) || 0;
+                const nextSprint: Sprint = {
+                    id: `s-${Date.now()}`,
+                    name: `Sprint ${sprintNum + 1}`,
+                    goal: 'Define new goals',
+                    startDate: new Date().toISOString().split('T')[0],
+                    endDate: new Date(Date.now() + 14 * 86400000).toISOString().split('T')[0],
+                    status: 'active',
+                    taskIds: []
+                };
+
+                const newActivity: ActivityLog = {
+                    id: Math.random().toString(36).substr(2, 9),
+                    userId: state.currentUser?.id || 'system',
+                    action: 'completed',
+                    target: activeSprint.name,
+                    time: new Date().toISOString(),
+                    type: 'success'
+                };
+
+                return {
+                    tasks: updatedTasks,
+                    sprints: [nextSprint],
+                    activities: [newActivity, ...state.activities],
+                    unreadNotifications: state.unreadNotifications + 1
+                };
+            }),
             removeUser: (userId) => set((state) => {
                 // Don't allow deleting current user
                 if (state.currentUser?.id === userId) return state;

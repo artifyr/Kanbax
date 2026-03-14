@@ -86,7 +86,7 @@ export const CreateTaskModal: React.FC<Props> = ({ isOpen, onClose }) => {
                             </div>
                             <button
                                 onClick={onClose}
-                                className="w-12 h-12 flex items-center justify-center rounded-2xl hover:bg-white text-slate-300 hover:text-midnight transition-colors border border-transparent hover:border-midnight/5 shadow-sm active:scale-90"
+                                className="w-12 h-12 flex items-center justify-center rounded-2xl hover:bg-canvas-white text-slate-300 hover:text-midnight transition-colors border border-transparent hover:border-midnight/5 shadow-sm active:scale-90"
                             >
                                 <X className="w-5 h-5" />
                             </button>
@@ -101,7 +101,7 @@ export const CreateTaskModal: React.FC<Props> = ({ isOpen, onClose }) => {
                                 <input
                                     value={title}
                                     onChange={(e) => setTitle(e.target.value)}
-                                    className="w-full bg-foggy-blue/40 border-none rounded-2xl px-6 py-5 text-xl font-bold text-midnight focus:bg-white focus:ring-8 focus:ring-primary/5 transition-all outline-none border-2 border-transparent focus:border-primary/20 shadow-sm"
+                                    className="w-full bg-foggy-blue/40 border-none rounded-2xl px-6 py-5 text-xl font-bold text-midnight placeholder:text-slate-400/50 focus:bg-paper-white focus:ring-8 focus:ring-primary/5 transition-all outline-none border-2 border-transparent focus:border-primary/20 shadow-sm"
                                     placeholder="e.g. Design System Phase 2"
                                     type="text"
                                 />
@@ -244,7 +244,7 @@ export const CreateTaskModal: React.FC<Props> = ({ isOpen, onClose }) => {
                                     <textarea
                                         value={description}
                                         onChange={(e) => setDescription(e.target.value)}
-                                        className="w-full bg-transparent border-none focus:ring-0 p-6 text-sm font-bold text-midnight placeholder:text-slate-300 resize-none min-h-[140px] italic"
+                                        className="w-full bg-transparent border-none focus:ring-0 p-6 text-sm font-bold text-midnight placeholder:text-slate-400/50 resize-none min-h-[140px] italic"
                                         placeholder="Enter detailed documentation for this task..."
                                     />
                                 </div>
@@ -272,9 +272,9 @@ export const CreateTaskModal: React.FC<Props> = ({ isOpen, onClose }) => {
                                             const mockImg = `https://picsum.photos/seed/${Math.random()}/400/300`;
                                             setAttachments([...attachments, mockImg]);
                                         }}
-                                        className="w-full py-10 flex flex-col items-center justify-center border-2 border-dashed border-midnight/10 rounded-[2rem] bg-canvas-white/50 hover:bg-white hover:border-primary/30 transition-all duration-300 shadow-inner cursor-pointer group hover:scale-[1.02] active:scale-95"
+                                        className="w-full py-10 flex flex-col items-center justify-center border-2 border-dashed border-midnight/10 rounded-[2rem] bg-canvas-white/50 hover:bg-paper-white hover:border-primary/30 transition-all duration-300 shadow-inner cursor-pointer group hover:scale-[1.02] active:scale-95"
                                     >
-                                        <Upload className="w-6 h-6 text-slate-300 mb-2 group-hover:text-primary transition-colors" />
+                                        <Upload className="w-6 h-6 text-slate-400/60 mb-2 group-hover:text-primary transition-colors" />
                                         <p className="text-[9px] font-extrabold text-slate-400 uppercase tracking-widest">Simulate Upload</p>
                                     </div>
                                 </div>

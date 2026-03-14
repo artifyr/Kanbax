@@ -29,7 +29,7 @@ export const Reports: React.FC = () => {
     ];
 
     return (
-        <div className="space-y-12 animate-soft-in">
+        <div className="space-y-12 animate-soft-in select-none">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
                 <div>
                     <div className="flex items-center gap-2 text-[10px] font-extrabold text-slate-400 mb-1 uppercase tracking-[0.2em]">

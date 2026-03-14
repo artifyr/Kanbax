@@ -83,7 +83,7 @@ export const Dashboard: React.FC = () => {
             {/* Bento Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                 {/* Weekly Velocity */}
-                <div className="lg:col-span-4 bg-paper-white p-8 rounded-[2.5rem] shadow-soft border border-midnight/5 group hover:border-primary/20 transition-all relative overflow-hidden flex flex-col">
+                <div className="lg:col-span-4 bg-paper-white p-8 rounded-[2.5rem] shadow-soft border border-midnight/5 group hover:border-primary/20 transition-all relative overflow-hidden flex flex-col select-none">
                     <div className="relative z-10 flex-1">
                         <div className="w-12 h-12 bg-primary/10 text-primary rounded-2xl flex items-center justify-center mb-6 ring-8 ring-primary/5">
                             <TrendingUp className="w-6 h-6" />
@@ -95,7 +95,7 @@ export const Dashboard: React.FC = () => {
                             <span>System Synchronized</span>
                         </div>
                     </div>
-                    <div className="h-24 w-full mt-4 -mx-8 -mb-8 overflow-hidden">
+                    <div className="h-24 w-full mt-4 -mx-8 -mb-8 overflow-hidden pointer-events-none">
                         <ResponsiveContainer width="100%" height="100%">
                             <AreaChart data={velocityData}>
                                 <Area 
@@ -201,9 +201,9 @@ export const Dashboard: React.FC = () => {
                 </div>
 
                 {/* Sprint Health */}
-                <div className="lg:col-span-3 bg-paper-white p-8 rounded-[2.5rem] shadow-soft border border-midnight/5 flex flex-col items-center justify-center text-center">
-                    <div className="relative w-40 h-40 flex items-center justify-center mb-6">
-                        <ResponsiveContainer width="100%" height="100%">
+                <div className="lg:col-span-3 bg-paper-white p-8 rounded-[2.5rem] shadow-soft border border-midnight/5 flex flex-col items-center justify-center text-center select-none">
+                    <div className="relative w-40 h-40 flex items-center justify-center mb-6 focus:outline-none">
+                        <ResponsiveContainer width="100%" height="100%" className="focus:outline-none">
                             <PieChart>
                                 <Pie
                                     data={pieData}
@@ -212,14 +212,15 @@ export const Dashboard: React.FC = () => {
                                     paddingAngle={5}
                                     dataKey="value"
                                     stroke="none"
+                                    isAnimationActive={true}
                                 >
                                     {pieData.map((entry, index) => (
-                                        <Cell key={`cell-${index}`} fill={entry.color} />
+                                        <Cell key={`cell-${index}`} fill={entry.color} className="outline-none focus:outline-none" />
                                     ))}
                                 </Pie>
                             </PieChart>
                         </ResponsiveContainer>
-                        <div className="absolute flex flex-col">
+                        <div className="absolute flex flex-col pointer-events-none">
                             <span className="text-3xl font-black text-midnight tracking-tighter tabular-nums">{healthPercentage}%</span>
                             <span className="text-[8px] font-extrabold text-slate-400 uppercase tracking-widest">Health</span>
                         </div>

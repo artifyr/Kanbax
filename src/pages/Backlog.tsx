@@ -1,5 +1,5 @@
 import React from 'react';
-import { Filter, MoreVertical, ChevronRight, LayoutGrid, List, Search, Plus, Tag, Trash2, FileJson } from 'lucide-react';
+import { Filter, MoreVertical, ChevronRight, LayoutGrid, List, Search, Plus, Tag, Trash2, FileJson, Archive } from 'lucide-react';
 import { useTaskStore } from '../hooks/useTaskStore';
 import { exportToCSV } from '../utils/export';
 
@@ -8,15 +8,20 @@ export const Backlog: React.FC = () => {
     const [sortBy, setSortBy] = React.useState<'id' | 'title' | 'priority' | 'status'>('id');
     const [sortOrder, setSortOrder] = React.useState<'asc' | 'desc'>('asc');
     const [viewMode, setViewMode] = React.useState<'list' | 'grid'>('list');
+    const [showArchived, setShowArchived] = React.useState(false);
 
     const priorityOrder = { 'critical': 0, 'high': 1, 'medium': 2, 'low': 3 };
 
     const filteredTasks = tasks
-        .filter(task =>
-            task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            task.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            task.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
-        )
+        .filter(task => {
+            const matchesSearch = 
+                task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                task.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                task.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
+            
+            if (showArchived) return task.status === 'archived' && matchesSearch;
+            return task.status !== 'archived' && matchesSearch;
+        })
         .sort((a, b) => {
             let comparison = 0;
             if (sortBy === 'priority') {
@@ -83,12 +88,12 @@ export const Backlog: React.FC = () => {
                         />
                     </div>
                     <div className="flex gap-2">
-                        <button className="flex items-center gap-2 px-6 py-3 bg-canvas-white rounded-xl border border-midnight/5 text-[10px] font-black uppercase tracking-widest text-midnight hover:bg-white transition-all shadow-sm">
+                        <button className="flex items-center gap-2 px-6 py-3 bg-canvas-white rounded-xl border border-midnight/5 text-[10px] font-black uppercase tracking-widest text-midnight hover:bg-paper-white transition-all shadow-sm">
                             <Filter className="w-3.5 h-3.5" /> Filter
                         </button>
                         <button 
                             onClick={handleExport}
-                            className="flex items-center gap-2 px-6 py-3 bg-canvas-white rounded-xl border border-midnight/5 text-[10px] font-black uppercase tracking-widest text-primary hover:bg-white transition-all shadow-sm"
+                            className="flex items-center gap-2 px-6 py-3 bg-canvas-white rounded-xl border border-midnight/5 text-[10px] font-black uppercase tracking-widest text-primary hover:bg-paper-white transition-all shadow-sm"
                             title="Export to CSV"
                         >
                             <FileJson className="w-3.5 h-3.5" /> 
@@ -96,19 +101,29 @@ export const Backlog: React.FC = () => {
                         </button>
                     </div>
                 </div>
-                <div className="flex items-center gap-2 bg-canvas-white p-1 rounded-xl shadow-inner border border-midnight/5">
+                <div className="flex items-center gap-6">
                     <button 
-                        onClick={() => setViewMode('list')}
-                        className={`p-2.5 rounded-lg transition-all ${viewMode === 'list' ? 'bg-white text-primary shadow-sm' : 'text-slate-300 hover:text-midnight'}`}
+                        onClick={() => setShowArchived(!showArchived)}
+                        className={`flex items-center gap-3 px-8 py-3.5 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all shadow-sm active:scale-95 ${showArchived ? 'bg-midnight text-canvas-white' : 'bg-canvas-white text-slate-400 hover:text-midnight hover:bg-paper-white border border-midnight/5'}`}
                     >
-                        <List className="w-4 h-4" />
+                        <Archive className="w-3.5 h-3.5" />
+                        {showArchived ? 'Viewing Archive' : 'Open Archive'}
                     </button>
-                    <button 
-                        onClick={() => setViewMode('grid')}
-                        className={`p-2.5 rounded-lg transition-all ${viewMode === 'grid' ? 'bg-white text-primary shadow-sm' : 'text-slate-300 hover:text-midnight'}`}
-                    >
-                        <LayoutGrid className="w-4 h-4" />
-                    </button>
+
+                    <div className="flex items-center gap-2 bg-canvas-white p-1 rounded-xl shadow-inner border border-midnight/5">
+                        <button 
+                            onClick={() => setViewMode('list')}
+                            className={`p-2.5 rounded-lg transition-all ${viewMode === 'list' ? 'bg-paper-white text-primary shadow-sm' : 'text-slate-300 hover:text-midnight'}`}
+                        >
+                            <List className="w-4 h-4" />
+                        </button>
+                        <button 
+                            onClick={() => setViewMode('grid')}
+                            className={`p-2.5 rounded-lg transition-all ${viewMode === 'grid' ? 'bg-paper-white text-primary shadow-sm' : 'text-slate-300 hover:text-midnight'}`}
+                        >
+                            <LayoutGrid className="w-4 h-4" />
+                        </button>
+                    </div>
                 </div>
             </div>
 
